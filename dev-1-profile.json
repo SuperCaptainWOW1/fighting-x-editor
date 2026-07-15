@@ -1,0 +1,2534 @@
+{
+  "dev-1": {
+    "framedata": {
+      "BACKWARD": {
+        "duration": 23,
+        "hurtboxes": [
+          {
+            "name": "Hurtbox_1",
+            "preset": "head",
+            "frames": [
+              1,
+              23
+            ]
+          },
+          {
+            "name": "Hurtbox_2",
+            "preset": "body",
+            "frames": [
+              1,
+              23
+            ]
+          },
+          {
+            "name": "Hurtbox_3",
+            "preset": "legsTop",
+            "frames": [
+              1,
+              23
+            ]
+          },
+          {
+            "name": "Hurtbox_4",
+            "preset": "legsBottom",
+            "frames": [
+              1,
+              23
+            ]
+          }
+        ],
+        "hitboxes": [],
+        "blendFramesNumber": 0,
+        "loop": true
+      },
+      "BLOCK_BREAK": {
+        "duration": 25,
+        "hurtboxes": [
+          {
+            "name": "Hurtbox_1",
+            "preset": "head",
+            "frames": [
+              1,
+              25
+            ]
+          },
+          {
+            "name": "Hurtbox_2",
+            "preset": "body",
+            "frames": [
+              1,
+              25
+            ]
+          },
+          {
+            "name": "Hurtbox_3",
+            "preset": "legsTop",
+            "frames": [
+              1,
+              25
+            ]
+          },
+          {
+            "name": "Hurtbox_4",
+            "preset": "legsBottom",
+            "frames": [
+              1,
+              25
+            ]
+          }
+        ],
+        "hitboxes": [],
+        "blendFramesNumber": 0,
+        "loop": false
+      },
+      "BLOCK_DODGE_DOWN": {
+        "duration": 38,
+        "hurtboxes": [
+          {
+            "name": "Hurtbox_1",
+            "preset": "head",
+            "frames": [
+              1,
+              38
+            ]
+          },
+          {
+            "name": "Hurtbox_2",
+            "preset": "body",
+            "frames": [
+              1,
+              38
+            ]
+          },
+          {
+            "name": "Hurtbox_3",
+            "preset": "legsTop",
+            "frames": [
+              1,
+              38
+            ]
+          },
+          {
+            "name": "Hurtbox_4",
+            "preset": "legsBottom",
+            "frames": [
+              1,
+              38
+            ]
+          }
+        ],
+        "hitboxes": [],
+        "blendFramesNumber": 0,
+        "loop": false
+      },
+      "BLOCK_HIT": {
+        "duration": 17,
+        "hurtboxes": [
+          {
+            "name": "Hurtbox_1",
+            "preset": "head",
+            "frames": [
+              1,
+              17
+            ]
+          },
+          {
+            "name": "Hurtbox_2",
+            "preset": "body",
+            "frames": [
+              1,
+              17
+            ]
+          },
+          {
+            "name": "Hurtbox_3",
+            "preset": "legsTop",
+            "frames": [
+              1,
+              17
+            ]
+          },
+          {
+            "name": "Hurtbox_4",
+            "preset": "legsBottom",
+            "frames": [
+              1,
+              17
+            ]
+          }
+        ],
+        "hitboxes": [],
+        "blendFramesNumber": 0,
+        "loop": false
+      },
+      "BLOCK_IN": {
+        "duration": 10,
+        "hurtboxes": [
+          {
+            "name": "Hurtbox_1",
+            "preset": "head",
+            "frames": [
+              1,
+              10
+            ]
+          },
+          {
+            "name": "Hurtbox_2",
+            "preset": "body",
+            "frames": [
+              1,
+              10
+            ]
+          },
+          {
+            "name": "Hurtbox_3",
+            "preset": "legsTop",
+            "frames": [
+              1,
+              10
+            ]
+          },
+          {
+            "name": "Hurtbox_4",
+            "preset": "legsBottom",
+            "frames": [
+              1,
+              10
+            ]
+          }
+        ],
+        "hitboxes": [],
+        "blendFramesNumber": 0,
+        "loop": false,
+        "lockWhenFinished": true
+      },
+      "BLOCK_OUT": {
+        "duration": 13,
+        "hurtboxes": [
+          {
+            "name": "Hurtbox_1",
+            "preset": "head",
+            "frames": [
+              1,
+              13
+            ]
+          },
+          {
+            "name": "Hurtbox_2",
+            "preset": "body",
+            "frames": [
+              1,
+              13
+            ]
+          },
+          {
+            "name": "Hurtbox_3",
+            "preset": "legsTop",
+            "frames": [
+              1,
+              13
+            ]
+          },
+          {
+            "name": "Hurtbox_4",
+            "preset": "legsBottom",
+            "frames": [
+              1,
+              13
+            ]
+          }
+        ],
+        "hitboxes": [],
+        "blendFramesNumber": 0,
+        "loop": false
+      },
+      "BLOCK": {
+        "duration": 78,
+        "hurtboxes": [
+          {
+            "name": "Hurtbox_1",
+            "preset": "head",
+            "frames": [
+              1,
+              78
+            ]
+          },
+          {
+            "name": "Hurtbox_2",
+            "preset": "body",
+            "frames": [
+              1,
+              78
+            ]
+          },
+          {
+            "name": "Hurtbox_3",
+            "preset": "legsTop",
+            "frames": [
+              1,
+              78
+            ]
+          },
+          {
+            "name": "Hurtbox_4",
+            "preset": "legsBottom",
+            "frames": [
+              1,
+              78
+            ]
+          }
+        ],
+        "hitboxes": [],
+        "blendFramesNumber": 0,
+        "loop": true
+      },
+      "CAST_FIREBALL": {
+        "duration": 59,
+        "hurtboxes": [
+          {
+            "name": "Hurtbox_1",
+            "preset": "head",
+            "frames": [
+              1,
+              59
+            ]
+          },
+          {
+            "name": "Hurtbox_2",
+            "preset": "body",
+            "frames": [
+              1,
+              59
+            ]
+          },
+          {
+            "name": "Hurtbox_3",
+            "preset": "legsTop",
+            "frames": [
+              1,
+              59
+            ]
+          },
+          {
+            "name": "Hurtbox_4",
+            "preset": "legsBottom",
+            "frames": [
+              1,
+              59
+            ]
+          }
+        ],
+        "hitboxes": [],
+        "castFireballFrames": [
+          9,
+          9
+        ],
+        "blendFramesNumber": 0,
+        "loop": false
+      },
+      "DEATH_FROM_ULT": {
+        "duration": 60,
+        "hurtboxes": [
+          {
+            "name": "Hurtbox_1",
+            "preset": "head",
+            "frames": [
+              1,
+              60
+            ]
+          },
+          {
+            "name": "Hurtbox_2",
+            "preset": "body",
+            "frames": [
+              1,
+              60
+            ]
+          },
+          {
+            "name": "Hurtbox_3",
+            "preset": "legsTop",
+            "frames": [
+              1,
+              60
+            ]
+          },
+          {
+            "name": "Hurtbox_4",
+            "preset": "legsBottom",
+            "frames": [
+              1,
+              60
+            ]
+          }
+        ],
+        "hitboxes": [],
+        "blendFramesNumber": 2,
+        "loop": false,
+        "lockWhenFinished": true
+      },
+      "DEATH": {
+        "duration": 48,
+        "hurtboxes": [
+          {
+            "name": "Hurtbox_1",
+            "preset": "head",
+            "frames": [
+              1,
+              48
+            ]
+          },
+          {
+            "name": "Hurtbox_2",
+            "preset": "body",
+            "frames": [
+              1,
+              48
+            ]
+          },
+          {
+            "name": "Hurtbox_3",
+            "preset": "legsTop",
+            "frames": [
+              1,
+              48
+            ]
+          },
+          {
+            "name": "Hurtbox_4",
+            "preset": "legsBottom",
+            "frames": [
+              1,
+              48
+            ]
+          }
+        ],
+        "hitboxes": [],
+        "blendFramesNumber": 2,
+        "loop": false,
+        "lockWhenFinished": true
+      },
+      "FALL_2": {
+        "duration": 49,
+        "hurtboxes": [
+          {
+            "name": "Hurtbox_1",
+            "preset": "head",
+            "frames": [
+              1,
+              49
+            ]
+          },
+          {
+            "name": "Hurtbox_2",
+            "preset": "body",
+            "frames": [
+              1,
+              49
+            ]
+          },
+          {
+            "name": "Hurtbox_3",
+            "preset": "legsTop",
+            "frames": [
+              1,
+              49
+            ]
+          },
+          {
+            "name": "Hurtbox_4",
+            "preset": "legsBottom",
+            "frames": [
+              1,
+              49
+            ]
+          }
+        ],
+        "hitboxes": [],
+        "blendFramesNumber": 0,
+        "loop": false
+      },
+      "FALL": {
+        "duration": 48,
+        "hurtboxes": [
+          {
+            "name": "Hurtbox_1",
+            "preset": "head",
+            "frames": [
+              1,
+              48
+            ]
+          },
+          {
+            "name": "Hurtbox_2",
+            "preset": "body",
+            "frames": [
+              1,
+              48
+            ]
+          },
+          {
+            "name": "Hurtbox_3",
+            "preset": "legsTop",
+            "frames": [
+              1,
+              48
+            ]
+          },
+          {
+            "name": "Hurtbox_4",
+            "preset": "legsBottom",
+            "frames": [
+              1,
+              48
+            ]
+          }
+        ],
+        "hitboxes": [],
+        "blendFramesNumber": 0,
+        "loop": false
+      },
+      "FORWARD": {
+        "duration": 23,
+        "hurtboxes": [
+          {
+            "name": "Hurtbox_1",
+            "preset": "head",
+            "frames": [
+              1,
+              23
+            ]
+          },
+          {
+            "name": "Hurtbox_2",
+            "preset": "body",
+            "frames": [
+              1,
+              23
+            ]
+          },
+          {
+            "name": "Hurtbox_3",
+            "preset": "legsTop",
+            "frames": [
+              1,
+              23
+            ]
+          },
+          {
+            "name": "Hurtbox_4",
+            "preset": "legsBottom",
+            "frames": [
+              1,
+              23
+            ]
+          }
+        ],
+        "hitboxes": [],
+        "blendFramesNumber": 0,
+        "loop": true
+      },
+      "GET_UP": {
+        "duration": 69,
+        "hurtboxes": [
+          {
+            "name": "Hurtbox_1",
+            "preset": "head",
+            "frames": [
+              34,
+              54
+            ]
+          },
+          {
+            "name": "Hurtbox_2",
+            "preset": "body",
+            "frames": [
+              34,
+              54
+            ]
+          },
+          {
+            "name": "Hurtbox_3",
+            "preset": "legsTop",
+            "frames": [
+              1,
+              69
+            ]
+          },
+          {
+            "name": "Hurtbox_4",
+            "preset": "legsBottom",
+            "frames": [
+              1,
+              69
+            ]
+          }
+        ],
+        "hitboxes": [],
+        "blendFramesNumber": 0,
+        "loop": false
+      },
+      "HIT_FIREBALL": {
+        "duration": 25,
+        "hurtboxes": [
+          {
+            "name": "Hurtbox_1",
+            "preset": "head",
+            "frames": [
+              1,
+              25
+            ]
+          },
+          {
+            "name": "Hurtbox_2",
+            "preset": "body",
+            "frames": [
+              1,
+              25
+            ]
+          },
+          {
+            "name": "Hurtbox_3",
+            "preset": "legsTop",
+            "frames": [
+              1,
+              25
+            ]
+          },
+          {
+            "name": "Hurtbox_4",
+            "preset": "legsBottom",
+            "frames": [
+              1,
+              25
+            ]
+          }
+        ],
+        "hitboxes": [],
+        "blendFramesNumber": 0,
+        "loop": false
+      },
+      "HIT_FRONTKICK_ULT": {
+        "duration": 38,
+        "hurtboxes": [
+          {
+            "name": "Hurtbox_1",
+            "preset": "head",
+            "frames": [
+              1,
+              38
+            ]
+          },
+          {
+            "name": "Hurtbox_2",
+            "preset": "body",
+            "frames": [
+              1,
+              38
+            ]
+          },
+          {
+            "name": "Hurtbox_3",
+            "preset": "legsTop",
+            "frames": [
+              1,
+              38
+            ]
+          },
+          {
+            "name": "Hurtbox_4",
+            "preset": "legsBottom",
+            "frames": [
+              1,
+              38
+            ]
+          }
+        ],
+        "hitboxes": [],
+        "blendFramesNumber": 0,
+        "loop": false
+      },
+      "HIT_KICK_2": {
+        "duration": 38,
+        "hurtboxes": [
+          {
+            "name": "Hurtbox_1",
+            "preset": "head",
+            "frames": [
+              1,
+              38
+            ]
+          },
+          {
+            "name": "Hurtbox_2",
+            "preset": "body",
+            "frames": [
+              1,
+              38
+            ]
+          },
+          {
+            "name": "Hurtbox_3",
+            "preset": "legsTop",
+            "frames": [
+              1,
+              38
+            ]
+          },
+          {
+            "name": "Hurtbox_4",
+            "preset": "legsBottom",
+            "frames": [
+              1,
+              38
+            ]
+          }
+        ],
+        "hitboxes": [],
+        "blendFramesNumber": 0,
+        "loop": false
+      },
+      "HIT_KICK_CLOSE": {
+        "duration": 38,
+        "hurtboxes": [
+          {
+            "name": "Hurtbox_1",
+            "preset": "head",
+            "frames": [
+              1,
+              38
+            ]
+          },
+          {
+            "name": "Hurtbox_2",
+            "preset": "body",
+            "frames": [
+              1,
+              38
+            ]
+          },
+          {
+            "name": "Hurtbox_3",
+            "preset": "legsTop",
+            "frames": [
+              1,
+              38
+            ]
+          },
+          {
+            "name": "Hurtbox_4",
+            "preset": "legsBottom",
+            "frames": [
+              1,
+              38
+            ]
+          }
+        ],
+        "hitboxes": [],
+        "blendFramesNumber": 0,
+        "loop": false
+      },
+      "HIT_KICK_HEAVY": {
+        "duration": 38,
+        "hurtboxes": [
+          {
+            "name": "Hurtbox_1",
+            "preset": "head",
+            "frames": [
+              1,
+              38
+            ]
+          },
+          {
+            "name": "Hurtbox_2",
+            "preset": "body",
+            "frames": [
+              1,
+              38
+            ]
+          },
+          {
+            "name": "Hurtbox_3",
+            "preset": "legsTop",
+            "frames": [
+              1,
+              38
+            ]
+          },
+          {
+            "name": "Hurtbox_4",
+            "preset": "legsBottom",
+            "frames": [
+              1,
+              38
+            ]
+          }
+        ],
+        "hitboxes": [],
+        "blendFramesNumber": 0,
+        "loop": false
+      },
+      "HIT_KICK": {
+        "duration": 38,
+        "hurtboxes": [
+          {
+            "name": "Hurtbox_1",
+            "preset": "head",
+            "frames": [
+              1,
+              38
+            ]
+          },
+          {
+            "name": "Hurtbox_2",
+            "preset": "body",
+            "frames": [
+              1,
+              38
+            ]
+          },
+          {
+            "name": "Hurtbox_3",
+            "preset": "legsTop",
+            "frames": [
+              1,
+              38
+            ]
+          },
+          {
+            "name": "Hurtbox_4",
+            "preset": "legsBottom",
+            "frames": [
+              1,
+              38
+            ]
+          }
+        ],
+        "hitboxes": [],
+        "blendFramesNumber": 0,
+        "loop": false
+      },
+      "HIT_PUNCH_2": {
+        "duration": 32,
+        "hurtboxes": [
+          {
+            "name": "Hurtbox_1",
+            "preset": "head",
+            "frames": [
+              1,
+              32
+            ]
+          },
+          {
+            "name": "Hurtbox_2",
+            "preset": "body",
+            "frames": [
+              1,
+              32
+            ]
+          },
+          {
+            "name": "Hurtbox_3",
+            "preset": "legsTop",
+            "frames": [
+              1,
+              32
+            ]
+          },
+          {
+            "name": "Hurtbox_4",
+            "preset": "legsBottom",
+            "frames": [
+              1,
+              32
+            ]
+          }
+        ],
+        "hitboxes": [],
+        "blendFramesNumber": 0,
+        "loop": false
+      },
+      "HIT_PUNCH_CLOSE": {
+        "duration": 32,
+        "hurtboxes": [
+          {
+            "name": "Hurtbox_1",
+            "preset": "head",
+            "frames": [
+              1,
+              32
+            ]
+          },
+          {
+            "name": "Hurtbox_2",
+            "preset": "body",
+            "frames": [
+              1,
+              32
+            ]
+          },
+          {
+            "name": "Hurtbox_3",
+            "preset": "legsTop",
+            "frames": [
+              1,
+              32
+            ]
+          },
+          {
+            "name": "Hurtbox_4",
+            "preset": "legsBottom",
+            "frames": [
+              1,
+              32
+            ]
+          }
+        ],
+        "hitboxes": [],
+        "blendFramesNumber": 0,
+        "loop": false
+      },
+      "HIT_PUNCH_HEAVY": {
+        "duration": 38,
+        "hurtboxes": [
+          {
+            "name": "Hurtbox_1",
+            "preset": "head",
+            "frames": [
+              1,
+              38
+            ]
+          },
+          {
+            "name": "Hurtbox_2",
+            "preset": "body",
+            "frames": [
+              1,
+              38
+            ]
+          },
+          {
+            "name": "Hurtbox_3",
+            "preset": "legsTop",
+            "frames": [
+              1,
+              38
+            ]
+          },
+          {
+            "name": "Hurtbox_4",
+            "preset": "legsBottom",
+            "frames": [
+              1,
+              38
+            ]
+          }
+        ],
+        "hitboxes": [],
+        "blendFramesNumber": 0,
+        "loop": false
+      },
+      "HIT_PUNCH": {
+        "duration": 32,
+        "hurtboxes": [
+          {
+            "name": "Hurtbox_1",
+            "preset": "head",
+            "frames": [
+              1,
+              32
+            ]
+          },
+          {
+            "name": "Hurtbox_2",
+            "preset": "body",
+            "frames": [
+              1,
+              32
+            ]
+          },
+          {
+            "name": "Hurtbox_3",
+            "preset": "legsTop",
+            "frames": [
+              1,
+              32
+            ]
+          },
+          {
+            "name": "Hurtbox_4",
+            "preset": "legsBottom",
+            "frames": [
+              1,
+              32
+            ]
+          }
+        ],
+        "hitboxes": [],
+        "blendFramesNumber": 0,
+        "loop": false
+      },
+      "IDLE": {
+        "duration": 78,
+        "hurtboxes": [
+          {
+            "name": "Hurtbox_1",
+            "preset": "head",
+            "frames": [
+              1,
+              78
+            ]
+          },
+          {
+            "name": "Hurtbox_2",
+            "preset": "body",
+            "frames": [
+              1,
+              78
+            ]
+          },
+          {
+            "name": "Hurtbox_3",
+            "preset": "legsTop",
+            "frames": [
+              1,
+              78
+            ]
+          },
+          {
+            "name": "Hurtbox_4",
+            "preset": "legsBottom",
+            "frames": [
+              1,
+              78
+            ]
+          }
+        ],
+        "hitboxes": [],
+        "blendFramesNumber": 3,
+        "loop": true
+      },
+      "KICK_2": {
+        "duration": 85,
+        "hurtboxes": [
+          {
+            "name": "Hurtbox_1",
+            "preset": "head",
+            "frames": [
+              1,
+              85
+            ]
+          },
+          {
+            "name": "Hurtbox_2",
+            "preset": "body",
+            "frames": [
+              1,
+              85
+            ]
+          },
+          {
+            "name": "Hurtbox_3",
+            "preset": "legsTop",
+            "frames": [
+              1,
+              85
+            ]
+          },
+          {
+            "name": "Hurtbox_4",
+            "preset": "legsBottom",
+            "frames": [
+              1,
+              85
+            ]
+          },
+          {
+            "name": "Hurtbox_5",
+            "frames": [
+              6,
+              28
+            ],
+            "size": [
+              0.6,
+              0.6,
+              0
+            ],
+            "position": [
+              0.7,
+              0.7,
+              0
+            ]
+          },
+          {
+            "name": "Hurtbox_6",
+            "frames": [
+              6,
+              28
+            ],
+            "size": [
+              0.4,
+              0.4,
+              0
+            ],
+            "position": [
+              1.2,
+              0.35,
+              0
+            ]
+          }
+        ],
+        "hitboxes": [
+          {
+            "name": "Hitbox_1",
+            "frames": [
+              12,
+              20
+            ],
+            "size": [
+              0.35,
+              0.2,
+              0
+            ],
+            "position": [
+              0.8,
+              0.55,
+              0
+            ],
+            "damage": 8
+          },
+          {
+            "name": "Hitbox_2",
+            "frames": [
+              12,
+              20
+            ],
+            "size": [
+              0.35,
+              0.2,
+              0
+            ],
+            "position": [
+              1.2,
+              0.35,
+              0
+            ],
+            "damage": 8
+          }
+        ],
+        "blendFramesNumber": 0,
+        "cancelWindow": [
+          12,
+          18
+        ],
+        "loop": false
+      },
+      "KICK_CLOSE": {
+        "duration": 62,
+        "hurtboxes": [
+          {
+            "name": "Hurtbox_1",
+            "preset": "head",
+            "frames": [
+              1,
+              62
+            ]
+          },
+          {
+            "name": "Hurtbox_2",
+            "preset": "body",
+            "frames": [
+              1,
+              62
+            ]
+          },
+          {
+            "name": "Hurtbox_3",
+            "preset": "legsTop",
+            "frames": [
+              1,
+              62
+            ]
+          },
+          {
+            "name": "Hurtbox_4",
+            "preset": "legsBottom",
+            "frames": [
+              1,
+              62
+            ]
+          },
+          {
+            "name": "Hurtbox_5",
+            "frames": [
+              6,
+              28
+            ],
+            "size": [
+              0.6,
+              0.6,
+              0
+            ],
+            "position": [
+              0.7,
+              0.7,
+              0
+            ]
+          },
+          {
+            "name": "Hurtbox_6",
+            "frames": [
+              6,
+              28
+            ],
+            "size": [
+              0.4,
+              0.4,
+              0
+            ],
+            "position": [
+              1.2,
+              0.35,
+              0
+            ]
+          }
+        ],
+        "hitboxes": [
+          {
+            "name": "Hitbox_1",
+            "frames": [
+              12,
+              20
+            ],
+            "size": [
+              0.35,
+              0.2,
+              0
+            ],
+            "position": [
+              0.8,
+              0.55,
+              0
+            ],
+            "damage": 8
+          },
+          {
+            "name": "Hitbox_2",
+            "frames": [
+              12,
+              20
+            ],
+            "size": [
+              0.35,
+              0.2,
+              0
+            ],
+            "position": [
+              1.2,
+              0.35,
+              0
+            ],
+            "damage": 8
+          }
+        ],
+        "blendFramesNumber": 0,
+        "loop": false
+      },
+      "KICK_HEAVY": {
+        "duration": 85,
+        "hurtboxes": [
+          {
+            "name": "Hurtbox_1",
+            "preset": "head",
+            "frames": [
+              1,
+              85
+            ]
+          },
+          {
+            "name": "Hurtbox_2",
+            "preset": "body",
+            "frames": [
+              1,
+              85
+            ]
+          },
+          {
+            "name": "Hurtbox_3",
+            "preset": "legsTop",
+            "frames": [
+              1,
+              85
+            ]
+          },
+          {
+            "name": "Hurtbox_4",
+            "preset": "legsBottom",
+            "frames": [
+              1,
+              85
+            ]
+          },
+          {
+            "name": "Hurtbox_5",
+            "frames": [
+              16,
+              35
+            ],
+            "size": [
+              0.6,
+              0.6,
+              0
+            ],
+            "position": [
+              0.7,
+              0.8,
+              0
+            ]
+          }
+        ],
+        "hitboxes": [
+          {
+            "name": "Hitbox_1",
+            "frames": [
+              16,
+              22
+            ],
+            "size": [
+              0.9,
+              0.35,
+              0
+            ],
+            "position": [
+              0.8,
+              0.75,
+              0
+            ],
+            "damage": 8
+          }
+        ],
+        "blendFramesNumber": 0,
+        "loop": false
+      },
+      "KICK": {
+        "duration": 62,
+        "hurtboxes": [
+          {
+            "name": "Hurtbox_1",
+            "preset": "head",
+            "frames": [
+              1,
+              62
+            ]
+          },
+          {
+            "name": "Hurtbox_2",
+            "preset": "body",
+            "frames": [
+              1,
+              62
+            ]
+          },
+          {
+            "name": "Hurtbox_3",
+            "preset": "legsTop",
+            "frames": [
+              1,
+              62
+            ]
+          },
+          {
+            "name": "Hurtbox_4",
+            "preset": "legsBottom",
+            "frames": [
+              1,
+              62
+            ]
+          },
+          {
+            "name": "Hurtbox_5",
+            "frames": [
+              6,
+              28
+            ],
+            "size": [
+              0.6,
+              0.6,
+              0
+            ],
+            "position": [
+              0.7,
+              0.7,
+              0
+            ]
+          },
+          {
+            "name": "Hurtbox_6",
+            "frames": [
+              6,
+              28
+            ],
+            "size": [
+              0.4,
+              0.4,
+              0
+            ],
+            "position": [
+              1.2,
+              0.35,
+              0
+            ]
+          }
+        ],
+        "hitboxes": [
+          {
+            "name": "Hitbox_1",
+            "frames": [
+              12,
+              20
+            ],
+            "size": [
+              0.35,
+              0.2,
+              0
+            ],
+            "position": [
+              0.8,
+              0.55,
+              0
+            ],
+            "damage": 8
+          },
+          {
+            "name": "Hitbox_2",
+            "frames": [
+              12,
+              20
+            ],
+            "size": [
+              0.35,
+              0.2,
+              0
+            ],
+            "position": [
+              1.2,
+              0.35,
+              0
+            ],
+            "damage": 8
+          }
+        ],
+        "blendFramesNumber": 0,
+        "cancelWindow": [
+          12,
+          18
+        ],
+        "loop": false
+      },
+      "PUNCH_2": {
+        "duration": 58,
+        "hurtboxes": [
+          {
+            "name": "Hurtbox_1",
+            "preset": "head",
+            "frames": [
+              1,
+              58
+            ]
+          },
+          {
+            "name": "Hurtbox_2",
+            "preset": "body",
+            "frames": [
+              1,
+              58
+            ]
+          },
+          {
+            "name": "Hurtbox_3",
+            "preset": "legsTop",
+            "frames": [
+              1,
+              58
+            ]
+          },
+          {
+            "name": "Hurtbox_4",
+            "preset": "legsBottom",
+            "frames": [
+              1,
+              58
+            ]
+          },
+          {
+            "name": "Hurtbox_5",
+            "frames": [
+              4,
+              18
+            ],
+            "size": [
+              0.65,
+              0.35,
+              0
+            ],
+            "position": [
+              0.7,
+              1.55,
+              0
+            ]
+          },
+          {
+            "name": "Hurtbox_6",
+            "frames": [
+              19,
+              24
+            ],
+            "size": [
+              0.5,
+              0.35,
+              0
+            ],
+            "position": [
+              0.7,
+              1.55,
+              0
+            ]
+          }
+        ],
+        "hitboxes": [
+          {
+            "name": "Hitbox_1",
+            "frames": [
+              9,
+              18
+            ],
+            "size": [
+              0.65,
+              0.15,
+              0
+            ],
+            "position": [
+              0.7,
+              1.55,
+              0
+            ],
+            "damage": 5
+          }
+        ],
+        "blendFramesNumber": 0,
+        "cancelWindow": [
+          10,
+          16
+        ],
+        "loop": false
+      },
+      "PUNCH_3": {
+        "duration": 48,
+        "hurtboxes": [
+          {
+            "name": "Hurtbox_1",
+            "preset": "head",
+            "frames": [
+              1,
+              48
+            ]
+          },
+          {
+            "name": "Hurtbox_2",
+            "preset": "body",
+            "frames": [
+              1,
+              48
+            ]
+          },
+          {
+            "name": "Hurtbox_3",
+            "preset": "legsTop",
+            "frames": [
+              1,
+              48
+            ]
+          },
+          {
+            "name": "Hurtbox_4",
+            "preset": "legsBottom",
+            "frames": [
+              1,
+              48
+            ]
+          },
+          {
+            "name": "Hurtbox_5",
+            "frames": [
+              4,
+              18
+            ],
+            "size": [
+              0.65,
+              0.35,
+              0
+            ],
+            "position": [
+              0.7,
+              1.55,
+              0
+            ]
+          },
+          {
+            "name": "Hurtbox_6",
+            "frames": [
+              19,
+              24
+            ],
+            "size": [
+              0.5,
+              0.35,
+              0
+            ],
+            "position": [
+              0.7,
+              1.55,
+              0
+            ]
+          }
+        ],
+        "hitboxes": [
+          {
+            "name": "Hitbox_1",
+            "frames": [
+              9,
+              18
+            ],
+            "size": [
+              0.65,
+              0.15,
+              0
+            ],
+            "position": [
+              0.7,
+              1.55,
+              0
+            ],
+            "damage": 5
+          }
+        ],
+        "blendFramesNumber": 0,
+        "cancelWindow": [
+          10,
+          16
+        ],
+        "loop": false
+      },
+      "PUNCH_CLOSE": {
+        "duration": 48,
+        "hurtboxes": [
+          {
+            "name": "Hurtbox_1",
+            "preset": "head",
+            "frames": [
+              1,
+              48
+            ]
+          },
+          {
+            "name": "Hurtbox_2",
+            "preset": "body",
+            "frames": [
+              1,
+              48
+            ]
+          },
+          {
+            "name": "Hurtbox_3",
+            "preset": "legsTop",
+            "frames": [
+              1,
+              48
+            ]
+          },
+          {
+            "name": "Hurtbox_4",
+            "preset": "legsBottom",
+            "frames": [
+              1,
+              48
+            ]
+          },
+          {
+            "name": "Hurtbox_5",
+            "frames": [
+              4,
+              18
+            ],
+            "size": [
+              0.65,
+              0.35,
+              0
+            ],
+            "position": [
+              0.7,
+              1.55,
+              0
+            ]
+          },
+          {
+            "name": "Hurtbox_6",
+            "frames": [
+              19,
+              24
+            ],
+            "size": [
+              0.5,
+              0.35,
+              0
+            ],
+            "position": [
+              0.7,
+              1.55,
+              0
+            ]
+          }
+        ],
+        "hitboxes": [
+          {
+            "name": "Hitbox_1",
+            "frames": [
+              9,
+              18
+            ],
+            "size": [
+              0.65,
+              0.15,
+              0
+            ],
+            "position": [
+              0.7,
+              1.55,
+              0
+            ],
+            "damage": 5
+          }
+        ],
+        "blendFramesNumber": 0,
+        "loop": false
+      },
+      "PUNCH_HEAVY": {
+        "duration": 48,
+        "hurtboxes": [
+          {
+            "name": "Hurtbox_1",
+            "preset": "head",
+            "frames": [
+              1,
+              48
+            ]
+          },
+          {
+            "name": "Hurtbox_2",
+            "preset": "body",
+            "frames": [
+              1,
+              48
+            ]
+          },
+          {
+            "name": "Hurtbox_3",
+            "preset": "legsTop",
+            "frames": [
+              1,
+              48
+            ]
+          },
+          {
+            "name": "Hurtbox_4",
+            "preset": "legsBottom",
+            "frames": [
+              1,
+              48
+            ]
+          },
+          {
+            "name": "Hurtbox_5",
+            "frames": [
+              11,
+              22
+            ],
+            "size": [
+              0.65,
+              0.35,
+              0
+            ],
+            "position": [
+              0.7,
+              1.45,
+              0
+            ]
+          },
+          {
+            "name": "Hurtbox_6",
+            "frames": [
+              23,
+              32
+            ],
+            "size": [
+              0.5,
+              0.35,
+              0
+            ],
+            "position": [
+              0.6,
+              1.45,
+              0
+            ]
+          },
+          {
+            "name": "Hurtbox_7",
+            "frames": [
+              11,
+              32
+            ],
+            "size": [
+              0.15,
+              0.6,
+              0
+            ],
+            "position": [
+              0.65,
+              0.3,
+              0
+            ]
+          }
+        ],
+        "hitboxes": [
+          {
+            "name": "Hitbox_1",
+            "frames": [
+              11,
+              15
+            ],
+            "size": [
+              0.75,
+              0.2,
+              0
+            ],
+            "position": [
+              0.75,
+              1.45,
+              0
+            ],
+            "damage": 5
+          }
+        ],
+        "blendFramesNumber": 0,
+        "loop": false
+      },
+      "PUNCH": {
+        "duration": 48,
+        "hurtboxes": [
+          {
+            "name": "Hurtbox_1",
+            "preset": "head",
+            "frames": [
+              1,
+              48
+            ]
+          },
+          {
+            "name": "Hurtbox_2",
+            "preset": "body",
+            "frames": [
+              1,
+              48
+            ]
+          },
+          {
+            "name": "Hurtbox_3",
+            "preset": "legsTop",
+            "frames": [
+              1,
+              48
+            ]
+          },
+          {
+            "name": "Hurtbox_4",
+            "preset": "legsBottom",
+            "frames": [
+              1,
+              48
+            ]
+          },
+          {
+            "name": "Hurtbox_5",
+            "frames": [
+              4,
+              18
+            ],
+            "size": [
+              0.65,
+              0.35,
+              0
+            ],
+            "position": [
+              0.7,
+              1.55,
+              0
+            ]
+          },
+          {
+            "name": "Hurtbox_6",
+            "frames": [
+              19,
+              24
+            ],
+            "size": [
+              0.5,
+              0.35,
+              0
+            ],
+            "position": [
+              0.7,
+              1.55,
+              0
+            ]
+          }
+        ],
+        "hitboxes": [
+          {
+            "name": "Hitbox_1",
+            "frames": [
+              9,
+              18
+            ],
+            "size": [
+              0.65,
+              0.15,
+              0
+            ],
+            "position": [
+              0.7,
+              1.55,
+              0
+            ],
+            "damage": 5
+          }
+        ],
+        "blendFramesNumber": 0,
+        "cancelWindow": [
+          10,
+          16
+        ],
+        "loop": false
+      },
+      "ULTIMATE_1": {
+        "duration": 100,
+        "hurtboxes": [
+          {
+            "name": "Hurtbox_1",
+            "preset": "head",
+            "frames": [
+              1,
+              100
+            ]
+          },
+          {
+            "name": "Hurtbox_2",
+            "preset": "body",
+            "frames": [
+              1,
+              100
+            ]
+          },
+          {
+            "name": "Hurtbox_3",
+            "preset": "legsTop",
+            "frames": [
+              1,
+              100
+            ]
+          },
+          {
+            "name": "Hurtbox_4",
+            "preset": "legsBottom",
+            "frames": [
+              1,
+              100
+            ]
+          },
+          {
+            "name": "Hurtbox_5",
+            "frames": [
+              4,
+              18
+            ],
+            "size": [
+              0.65,
+              0.35,
+              0
+            ],
+            "position": [
+              0.7,
+              1.55,
+              0
+            ]
+          },
+          {
+            "name": "Hurtbox_6",
+            "frames": [
+              19,
+              24
+            ],
+            "size": [
+              0.5,
+              0.35,
+              0
+            ],
+            "position": [
+              0.7,
+              1.55,
+              0
+            ]
+          }
+        ],
+        "hitboxes": [
+          {
+            "name": "Hitbox_1",
+            "frames": [
+              31,
+              36
+            ],
+            "size": [
+              0.65,
+              0.15,
+              0
+            ],
+            "position": [
+              0.7,
+              1.55,
+              0
+            ],
+            "damage": 80
+          }
+        ],
+        "blendFramesNumber": 0,
+        "loop": false
+      },
+      "ULTIMATE_2": {
+        "duration": 68,
+        "hurtboxes": [
+          {
+            "name": "Hurtbox_1",
+            "preset": "head",
+            "frames": [
+              1,
+              68
+            ]
+          },
+          {
+            "name": "Hurtbox_2",
+            "preset": "body",
+            "frames": [
+              1,
+              68
+            ]
+          },
+          {
+            "name": "Hurtbox_3",
+            "preset": "legsTop",
+            "frames": [
+              1,
+              68
+            ]
+          },
+          {
+            "name": "Hurtbox_4",
+            "preset": "legsBottom",
+            "frames": [
+              1,
+              68
+            ]
+          },
+          {
+            "name": "Hurtbox_5",
+            "frames": [
+              4,
+              18
+            ],
+            "size": [
+              0.65,
+              0.35,
+              0
+            ],
+            "position": [
+              0.7,
+              1.55,
+              0
+            ]
+          },
+          {
+            "name": "Hurtbox_6",
+            "frames": [
+              19,
+              24
+            ],
+            "size": [
+              0.5,
+              0.35,
+              0
+            ],
+            "position": [
+              0.7,
+              1.55,
+              0
+            ]
+          }
+        ],
+        "hitboxes": [
+          {
+            "name": "Hitbox_1",
+            "frames": [
+              25,
+              30
+            ],
+            "size": [
+              0.65,
+              0.15,
+              0
+            ],
+            "position": [
+              0.7,
+              1.55,
+              0
+            ],
+            "damage": 80
+          }
+        ],
+        "blendFramesNumber": 0,
+        "loop": false
+      },
+      "ULTIMATE_3": {
+        "duration": 55,
+        "hurtboxes": [
+          {
+            "name": "Hurtbox_1",
+            "preset": "head",
+            "frames": [
+              1,
+              55
+            ]
+          },
+          {
+            "name": "Hurtbox_2",
+            "preset": "body",
+            "frames": [
+              1,
+              55
+            ]
+          },
+          {
+            "name": "Hurtbox_3",
+            "preset": "legsTop",
+            "frames": [
+              1,
+              55
+            ]
+          },
+          {
+            "name": "Hurtbox_4",
+            "preset": "legsBottom",
+            "frames": [
+              1,
+              55
+            ]
+          },
+          {
+            "name": "Hurtbox_5",
+            "frames": [
+              4,
+              13
+            ],
+            "size": [
+              0.65,
+              0.35,
+              0
+            ],
+            "position": [
+              0.7,
+              1.55,
+              0
+            ]
+          }
+        ],
+        "hitboxes": [
+          {
+            "name": "Hitbox_1",
+            "frames": [
+              14,
+              19
+            ],
+            "size": [
+              0.65,
+              0.15,
+              0
+            ],
+            "position": [
+              0.7,
+              1.55,
+              0
+            ],
+            "damage": 80
+          }
+        ],
+        "blendFramesNumber": 0,
+        "loop": false
+      },
+      "ULTIMATE_4": {
+        "duration": 68,
+        "hurtboxes": [
+          {
+            "name": "Hurtbox_1",
+            "preset": "head",
+            "frames": [
+              1,
+              68
+            ]
+          },
+          {
+            "name": "Hurtbox_2",
+            "preset": "body",
+            "frames": [
+              1,
+              68
+            ]
+          },
+          {
+            "name": "Hurtbox_3",
+            "preset": "legsTop",
+            "frames": [
+              1,
+              68
+            ]
+          },
+          {
+            "name": "Hurtbox_4",
+            "preset": "legsBottom",
+            "frames": [
+              1,
+              68
+            ]
+          },
+          {
+            "name": "Hurtbox_5",
+            "frames": [
+              4,
+              18
+            ],
+            "size": [
+              0.65,
+              0.35,
+              0
+            ],
+            "position": [
+              0.7,
+              1.55,
+              0
+            ]
+          },
+          {
+            "name": "Hurtbox_6",
+            "frames": [
+              19,
+              24
+            ],
+            "size": [
+              0.5,
+              0.35,
+              0
+            ],
+            "position": [
+              0.7,
+              1.55,
+              0
+            ]
+          }
+        ],
+        "hitboxes": [
+          {
+            "name": "Hitbox_1",
+            "frames": [
+              26,
+              32
+            ],
+            "size": [
+              0.65,
+              0.15,
+              0
+            ],
+            "position": [
+              0.7,
+              1.55,
+              0
+            ],
+            "damage": 80
+          }
+        ],
+        "blendFramesNumber": 0,
+        "loop": false
+      },
+      "UPPERCUT": {
+        "duration": 48,
+        "hurtboxes": [
+          {
+            "name": "Hurtbox_1",
+            "preset": "head",
+            "frames": [
+              1,
+              48
+            ]
+          },
+          {
+            "name": "Hurtbox_2",
+            "preset": "body",
+            "frames": [
+              1,
+              48
+            ]
+          },
+          {
+            "name": "Hurtbox_3",
+            "preset": "legsTop",
+            "frames": [
+              1,
+              48
+            ]
+          },
+          {
+            "name": "Hurtbox_4",
+            "preset": "legsBottom",
+            "frames": [
+              1,
+              48
+            ]
+          },
+          {
+            "name": "Hurtbox_5",
+            "frames": [
+              4,
+              18
+            ],
+            "size": [
+              0.65,
+              0.35,
+              0
+            ],
+            "position": [
+              0.7,
+              1.55,
+              0
+            ]
+          },
+          {
+            "name": "Hurtbox_6",
+            "frames": [
+              19,
+              24
+            ],
+            "size": [
+              0.5,
+              0.35,
+              0
+            ],
+            "position": [
+              0.7,
+              1.55,
+              0
+            ]
+          }
+        ],
+        "hitboxes": [
+          {
+            "name": "Hitbox_1",
+            "frames": [
+              9,
+              18
+            ],
+            "size": [
+              0.65,
+              0.15,
+              0
+            ],
+            "position": [
+              0.7,
+              1.55,
+              0
+            ],
+            "damage": 5
+          }
+        ],
+        "blendFramesNumber": 0,
+        "cancelWindow": [
+          4,
+          6
+        ],
+        "loop": false
+      }
+    },
+    "animations": {
+      "IDLE": {
+        "left": "A_StanceA_idle",
+        "right": "A_StanceB_Idle"
+      },
+      "FORWARD": {
+        "left": "A_StanceA_Step_F_IP",
+        "right": "A_StanceB_Step_F_IP"
+      },
+      "BACKWARD": {
+        "left": "A_StanceA_Step_B_IP",
+        "right": "A_StanceB_Step_B_IP"
+      },
+      "PUNCH": {
+        "left": "A_StanceA_Punch_L_IP",
+        "right": "A_StanceB_Punch_R_IP"
+      },
+      "PUNCH_2": {
+        "left": "A_StanceA_Hook_L_IP",
+        "right": "A_StanceB_Hook_R_IP"
+      },
+      "PUNCH_3": {
+        "left": "A_StanceA_Hook_Body_R_IP",
+        "right": "A_StanceB_Hook_Body_L_IP"
+      },
+      "PUNCH_CLOSE": {
+        "left": "A_StanceA_Elbow_L_IP",
+        "right": "A_StanceB_Elbow_R_IP"
+      },
+      "PUNCH_HEAVY": {
+        "left": "A_StanceA_Hook_R_RT",
+        "right": "A_StanceB_Hook_L_RT"
+      },
+      "KICK": {
+        "left": "A_StanceA_LowKick_RT",
+        "right": "A_StanceB_LowKick_RT"
+      },
+      "KICK_2": {
+        "left": "A_StanceA_LowKick_StanceB",
+        "right": "A_StanceB_LowKick_StanceA"
+      },
+      "KICK_CLOSE": {
+        "left": "A_StanceA_KneeKick_RT",
+        "right": "A_StanceB_KneeKick_RT"
+      },
+      "KICK_HEAVY": {
+        "left": "A_StanceA_MidKick_StanceB",
+        "right": "A_StanceB_MidKick_StanceA"
+      },
+      "BLOCK": {
+        "left": "A_StanceA_Block",
+        "right": "A_StanceB_Block"
+      },
+      "BLOCK_DODGE_DOWN": {
+        "left": "A_StanceA_Block_Hit_Leg",
+        "right": "A_StanceB_Block_Hit_Leg"
+      },
+      "BLOCK_IN": {
+        "left": "A_StanceA_Block_In",
+        "right": "A_StanceB_Block_In"
+      },
+      "BLOCK_OUT": {
+        "left": "A_StanceA_Block_Out",
+        "right": "A_StanceB_Block_Out"
+      },
+      "BLOCK_BREAK": {
+        "left": "A_StanceA_Block_Break",
+        "right": "A_StanceB_Block_Hit_Break_RT"
+      },
+      "BLOCK_HIT": {
+        "left": "A_StanceA_Block_Hit_F_RT",
+        "right": "A_StanceB_Block_Hit_F_RT"
+      },
+      "HIT_PUNCH": {
+        "left": "A_StanceA_Hit_Head_R_IP",
+        "right": "A_StanceB_Hit_Head_L_IP"
+      },
+      "HIT_PUNCH_2": {
+        "left": "A_StanceA_Hit_Body_F_IP",
+        "right": "A_StanceB_Hit_Body_F_IP"
+      },
+      "HIT_PUNCH_CLOSE": {
+        "left": "A_StanceA_Hit_Head_F_IP",
+        "right": "A_StanceB_Hit_Head_F_IP"
+      },
+      "HIT_PUNCH_HEAVY": {
+        "left": "A_StanceA_Hit_Head_Dwn_RT",
+        "right": "A_StanceB_Hit_Head_Dwn_RT"
+      },
+      "HIT_KICK": {
+        "left": "A_StanceA_Hit_Leg_R_RT",
+        "right": "A_StanceB_Hit_Leg_L_RT"
+      },
+      "HIT_KICK_2": {
+        "left": "A_StanceA_Hit_Leg_L_RT",
+        "right": "A_StanceB_Hit_Leg_R_RT"
+      },
+      "HIT_KICK_CLOSE": {
+        "left": "A_StanceA_Hit_Body_R_RT",
+        "right": "A_StanceB_Hit_Body_L_RT"
+      },
+      "HIT_KICK_HEAVY": {
+        "left": "A_StanceA_Hit_Head_L_RT",
+        "right": "A_StanceB_Hit_Head_R_RT"
+      },
+      "HIT_FRONTKICK_ULT": {
+        "left": "A_StanceA_Hit_Body_F_RT",
+        "right": "A_StanceB_Hit_Body_F_RT"
+      },
+      "FALL": {
+        "left": "A_StanceA_FallBack_F",
+        "right": "A_StanceB_FallBack_F"
+      },
+      "FALL_2": {
+        "left": "A_StanceA_FallBack_Upper",
+        "right": "A_StanceB_FallBack_Upper"
+      },
+      "GET_UP": {
+        "left": "A_StanceA_StandUp_Back",
+        "right": "A_StanceB_StandUp_Back"
+      },
+      "DEATH": {
+        "left": "A_StanceA_FallBack_F",
+        "right": "A_StanceB_FallBack_F"
+      },
+      "DEATH_FROM_ULT": {
+        "left": "A_StanceA_FallBack_Flip",
+        "right": "A_StanceB_FallBack_Flip"
+      },
+      "ULTIMATE_1": {
+        "left": "A_StanceA_OverHand_R_StanceB_Dodge",
+        "right": "A_StanceB_OverHand_L_StanceA_Dodge"
+      },
+      "ULTIMATE_2": {
+        "left": "A_StanceA_SuperMan",
+        "right": "A_StanceB_SuperMan"
+      },
+      "ULTIMATE_3": {
+        "left": "A_StanceA_Head_Attack",
+        "right": "A_StanceB_Head_Attack"
+      },
+      "ULTIMATE_4": {
+        "left": "A_StanceA_FrontKick_Jump_RT",
+        "right": "A_StanceB_FrontKick_Jump_RT"
+      },
+      "CAST_FIREBALL": {
+        "left": "A_StanceA_Push_RT",
+        "right": "A_StanceB_Push_RT"
+      },
+      "UPPERCUT": {
+        "left": "A_StanceA_Upper_R_IP",
+        "right": "A_StanceB_Upper_L_IP"
+      },
+      "HIT_FIREBALL": {
+        "left": "A_StanceA_Hit_Head_R_IP",
+        "right": "A_StanceB_Hit_Head_L_IP"
+      }
+    }
+  }
+}
