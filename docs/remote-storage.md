@@ -8,7 +8,7 @@ VITE_PROJECT_STORAGE_MODE=remote
 VITE_FRAMEDATA_CDN_BASE_URL=https://www.sports.ru/special/json-admin-backend/fighting-editor
 VITE_FRAMEDATA_SAVE_URL=https://www.sports.ru/special/json-admin-backend/shared/add-item
 VITE_FRAMEDATA_PROFILE_SLUG=fighting-editor
-VITE_FRAMEDATA_REQUEST_CREDENTIALS=include
+VITE_FRAMEDATA_REQUEST_CREDENTIALS=omit
 ```
 
 Restart Vite after changing environment variables. All configuration is read
