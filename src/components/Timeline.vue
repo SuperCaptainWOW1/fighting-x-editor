@@ -96,7 +96,7 @@ const cancelWindowStyle = computed(() => {
 
   return {
     left: `${boundaryPercent(frames[0], "start")}%`,
-    width: `${((frames[1] - frames[0] + 1) / props.state.duration) * 100}%`,
+    width: `${((frames[1] - frames[0]) / props.state.duration) * 100}%`,
   };
 });
 
@@ -519,12 +519,12 @@ onBeforeUnmount(() => {
   &__cancel-label strong { overflow: hidden; color: var(--text-secondary); font-size: 10px; font-weight: 700; text-overflow: ellipsis; white-space: nowrap; }
   &__cancel-label span { color: var(--text-muted); font-size: 9px; font-variant-numeric: tabular-nums; }
   &__cancel-lane { position: relative; min-width: 0; overflow: hidden; background: color-mix(in srgb, var(--state-accent) 3%, var(--surface)); cursor: ew-resize; }
-  &__cancel-bar { position: absolute; top: 5px; height: 24px; min-width: 5px; overflow: visible; border: 1px solid color-mix(in srgb, var(--state-accent) 75%, var(--border)); border-radius: 4px; background: color-mix(in srgb, var(--state-accent) 24%, var(--surface)); color: color-mix(in srgb, var(--state-accent) 72%, var(--text)); cursor: grab; touch-action: none; }
+  &__cancel-bar { position: absolute; top: 3px; height: calc(100% - 6px); min-width: 5px; overflow: visible; border: 1px solid color-mix(in srgb, var(--state-accent) 75%, var(--border)); border-radius: 3px; background: color-mix(in srgb, var(--state-accent) 24%, var(--surface)); color: color-mix(in srgb, var(--state-accent) 72%, var(--text)); cursor: grab; touch-action: none; }
   &__cancel-bar:active { cursor: grabbing; }
-  &__cancel-bar span { display: block; padding: 0 7px; overflow: hidden; font-size: 10px; font-weight: 750; line-height: 22px; text-overflow: ellipsis; white-space: nowrap; }
-  &__cancel-handle { position: absolute; z-index: 1; top: -1px; bottom: -1px; width: 9px; border-inline: 1px solid color-mix(in srgb, var(--state-accent) 75%, var(--border)); background: color-mix(in srgb, var(--state-accent) 38%, var(--surface)); cursor: ew-resize; }
-  &__cancel-handle--start { left: -1px; border-radius: 4px 0 0 4px; }
-  &__cancel-handle--end { right: -1px; border-radius: 0 4px 4px 0; }
+  &__cancel-bar span { display: block; padding: 0 10px; overflow: hidden; font-size: 10px; font-weight: 750; line-height: 26px; text-overflow: ellipsis; white-space: nowrap; }
+  &__cancel-handle { position: absolute; z-index: 1; top: -1px; bottom: -1px; width: 10px; border: 1px solid color-mix(in srgb, var(--state-accent) 75%, var(--border)); background: color-mix(in srgb, var(--state-accent) 38%, var(--surface)); cursor: ew-resize; }
+  &__cancel-handle--start { left: -1px; border-radius: 3px 0 0 3px; }
+  &__cancel-handle--end { right: -1px; border-radius: 0 3px 3px 0; }
 
   &__track { height: 52px; border-bottom: 1px solid var(--border-soft); }
   &__track--selected { background: var(--state-accent-soft); }
