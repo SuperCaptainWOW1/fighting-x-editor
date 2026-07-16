@@ -90,9 +90,91 @@ const TIMELINE_COLLAPSE_THRESHOLD = 62;
 const SIDE_PANEL_MAX_WIDTH = 520;
 const MIN_VIEWPORT_WIDTH = 320;
 const MIN_VIEWPORT_HEIGHT = 150;
+const PANEL_LAYOUT_STORAGE_KEY = "framedata-editor-panel-layout";
 let activePanelResize: { panel: ResizablePanel; pointerId: number } | null = null;
 let previousBodyCursor = "";
 let previousBodyUserSelect = "";
+
+interface StoredPanelLayout {
+  version: 1;
+  leftWidth: number;
+  rightWidth: number;
+  timelineHeight: number;
+  leftCollapsed: boolean;
+  rightCollapsed: boolean;
+  timelineCollapsed: boolean;
+}
+
+const persistPanelLayout = () => {
+  const layout: StoredPanelLayout = {
+    version: 1,
+    leftWidth: leftPanelWidth.value,
+    rightWidth: rightPanelWidth.value,
+    timelineHeight: timelineHeight.value,
+    leftCollapsed: leftPanelCollapsed.value,
+    rightCollapsed: rightPanelCollapsed.value,
+    timelineCollapsed: timelineCollapsed.value,
+  };
+
+  try {
+    window.localStorage.setItem(PANEL_LAYOUT_STORAGE_KEY, JSON.stringify(layout));
+  } catch {
+    // The editor remains usable when browser storage is unavailable.
+  }
+};
+
+const restorePanelLayout = () => {
+  try {
+    const raw = window.localStorage.getItem(PANEL_LAYOUT_STORAGE_KEY);
+    if (!raw) return false;
+    const layout = JSON.parse(raw) as Partial<StoredPanelLayout>;
+    const {
+      leftWidth,
+      rightWidth,
+      timelineHeight: storedTimelineHeight,
+      leftCollapsed,
+      rightCollapsed,
+      timelineCollapsed: storedTimelineCollapsed,
+    } = layout;
+    if (
+      layout.version !== 1 ||
+      typeof leftWidth !== "number" || !Number.isFinite(leftWidth) ||
+      typeof rightWidth !== "number" || !Number.isFinite(rightWidth) ||
+      typeof storedTimelineHeight !== "number" || !Number.isFinite(storedTimelineHeight) ||
+      typeof leftCollapsed !== "boolean" ||
+      typeof rightCollapsed !== "boolean" ||
+      typeof storedTimelineCollapsed !== "boolean"
+    ) {
+      return false;
+    }
+
+    leftPanelWidth.value = Math.min(
+      SIDE_PANEL_MAX_WIDTH,
+      Math.max(COLLAPSED_SIDE_WIDTH, Math.round(leftWidth)),
+    );
+    rightPanelWidth.value = Math.min(
+      SIDE_PANEL_MAX_WIDTH,
+      Math.max(COLLAPSED_SIDE_WIDTH, Math.round(rightWidth)),
+    );
+    timelineHeight.value = Math.max(
+      COLLAPSED_TIMELINE_HEIGHT,
+      Math.round(storedTimelineHeight),
+    );
+    leftPanelCollapsed.value = leftCollapsed;
+    rightPanelCollapsed.value = rightCollapsed;
+    timelineCollapsed.value = storedTimelineCollapsed;
+    return true;
+  } catch {
+    return false;
+  }
+};
+
+const hasStoredPanelLayout = restorePanelLayout();
+if (!hasStoredPanelLayout) {
+  const compactLayout = window.matchMedia("(max-width: 1100px)").matches;
+  leftPanelCollapsed.value = compactLayout;
+  rightPanelCollapsed.value = compactLayout;
+}
 
 const editorLayoutStyle = computed(() => ({
   "--left-panel-width": `${leftPanelCollapsed.value ? COLLAPSED_SIDE_WIDTH : leftPanelWidth.value}px`,
@@ -161,6 +243,7 @@ const finishPanelResize = (event?: PointerEvent) => {
   } else if (active.panel === "timeline" && timelineHeight.value <= TIMELINE_COLLAPSE_THRESHOLD) {
     timelineCollapsed.value = true;
   }
+  persistPanelLayout();
 };
 
 const beginPanelResize = (event: PointerEvent, panel: ResizablePanel) => {
@@ -188,7 +271,15 @@ const expandPanel = (panel: ResizablePanel) => {
     timelineHeight.value = Math.max(180, timelineHeight.value);
     timelineCollapsed.value = false;
   }
+  persistPanelLayout();
   window.requestAnimationFrame(clampPanelSizes);
+};
+
+const collapsePanel = (panel: ResizablePanel) => {
+  if (panel === "left") leftPanelCollapsed.value = true;
+  else if (panel === "right") rightPanelCollapsed.value = true;
+  else timelineCollapsed.value = true;
+  persistPanelLayout();
 };
 
 const clampPanelSizes = () => {
@@ -1181,9 +1272,6 @@ onMounted(async () => {
   window.addEventListener("keydown", handleKeyboardShortcut, true);
   window.addEventListener("pointermove", handlePointerPosition, { passive: true });
   window.addEventListener("resize", clampPanelSizes, { passive: true });
-  const compactLayout = window.matchMedia("(max-width: 1100px)").matches;
-  leftPanelCollapsed.value = compactLayout;
-  rightPanelCollapsed.value = compactLayout;
   clampPanelSizes();
   const preview = SharedPreviewRenderer.getInstance();
   await preview.init();
@@ -1296,7 +1384,7 @@ watch(
         class="side-panel-tab side-panel-tab--left"
         type="button"
         title="Свернуть левую панель"
-        @click="leftPanelCollapsed = true"
+        @click="collapsePanel('left')"
       >
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 5-7 7 7 7" /></svg>
       </button>
@@ -1402,7 +1490,7 @@ watch(
         class="side-panel-tab side-panel-tab--right"
         type="button"
         title="Свернуть правую панель"
-        @click="rightPanelCollapsed = true"
+        @click="collapsePanel('right')"
       >
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7" /></svg>
       </button>
@@ -1463,7 +1551,7 @@ watch(
         :class="{ 'timeline-collapse--rail': timelineCollapsed }"
         type="button"
         :title="timelineCollapsed ? 'Развернуть таймлайн' : 'Свернуть таймлайн'"
-        @click="timelineCollapsed ? expandPanel('timeline') : (timelineCollapsed = true)"
+        @click="timelineCollapsed ? expandPanel('timeline') : collapsePanel('timeline')"
       >
         <svg v-if="timelineCollapsed" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 15 7-7 7 7" /></svg>
         <svg v-else viewBox="0 0 24 24" aria-hidden="true"><path d="m5 9 7 7 7-7" /></svg>
