@@ -260,6 +260,9 @@ const stateSettingsChanges = computed<Record<string, boolean>>(() => {
     lockWhenFinished:
       Boolean(current.lockWhenFinished) !==
       Boolean(saved.data.lockWhenFinished),
+    cancelWindow:
+      JSON.stringify(current.cancelWindow) !==
+      JSON.stringify(saved.data.cancelWindow),
     animations: saved.animations
       ? JSON.stringify(current.animations[previewSide.value]) !==
         JSON.stringify(saved.animations[previewSide.value])
@@ -478,7 +481,7 @@ const dirtyTooltipItems = computed<DirtyTooltipItem[]>(() => {
     ["loop", "Цикличное состояние"],
     ["lockWhenFinished", "Фиксировать в конце"],
     ["castFireballFrames", "Кадры запуска снаряда"],
-    ["cancelWindow", "Окно отмены"],
+    ["cancelWindow", "Окно комбо"],
   ];
 
   generalFields.forEach(([field, label]) => {
@@ -905,6 +908,9 @@ const handleDurationUpdate = (value: number) => {
     const nextDuration = Math.max(1, value);
 
     data.duration = nextDuration;
+    if (data.cancelWindow) {
+      data.cancelWindow = fitFrameWindow(data.cancelWindow, nextDuration);
+    }
     data.boxes.forEach((box) => {
       const spansEntireAnimation =
         box.frames[0] === 1 && box.frames[1] === previousDuration;
@@ -1246,12 +1252,14 @@ watch(
             :changed-fields="stateSettingsChanges"
             :clip-names="clipNames"
             :preview-side="previewSide"
+            :is-attack="currentStateCategory.id === 'attack'"
             @history-start="beginHistoryTransaction"
             @history-end="endHistoryTransaction"
             @update:duration="handleDurationUpdate"
             @update:loop="handleLoopUpdate"
             @update:lock-when-finished="handleLockWhenFinishedUpdate"
             @update:blend-frames-number="updateCurrentEntry((data: EditorStateData) => { data.blendFramesNumber = Math.max(0, $event) })"
+            @update:cancel-window="updateCurrentEntry((data: EditorStateData) => { data.cancelWindow = $event })"
             @update:preview-side="previewSide = $event"
             @update:animations="(side, value) => updateCurrentEntry((data: EditorStateData) => { data.animations[side] = value })"
           />
@@ -1382,6 +1390,7 @@ watch(
         :state="currentEntry.data"
         :current-frame="currentFrame"
         :selected-box-ids="selectedBoxIds"
+        :show-cancel-window="currentStateCategory.id === 'attack'"
         @interaction-start="beginHistoryTransaction"
         @interaction-end="endHistoryTransaction"
         @update:current-frame="currentFrame = $event"

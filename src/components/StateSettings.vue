@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import type { EditorStateData } from "../types/framedata";
+import type { EditorStateData, FrameWindow } from "../types/framedata";
 
 const props = withDefaults(
   defineProps<{
     state: EditorStateData;
     clipNames: string[];
     previewSide: "left" | "right";
+    isAttack: boolean;
     changedFields?: Record<string, boolean>;
   }>(),
   { changedFields: () => ({}) },
@@ -19,6 +20,7 @@ const emit = defineEmits<{
   "update:loop": [value: boolean];
   "update:lockWhenFinished": [value: boolean];
   "update:blendFramesNumber": [value: number];
+  "update:cancelWindow": [value: FrameWindow | undefined];
   "update:previewSide": [value: "left" | "right"];
   "update:animations": [side: "left" | "right", value: string];
 }>();
@@ -37,6 +39,28 @@ const hasExclusiveFieldsConflict = computed(
 );
 const EXCLUSIVE_FIELDS_WARNING =
   "Эти два поля не могу существовать вместе. Выберите одно. Иначе иметь значение будет только Фиксировать в конце";
+
+const addCancelWindow = () => {
+  emit("update:cancelWindow", [1, props.state.duration]);
+};
+
+const updateCancelWindowFrame = (edge: 0 | 1, event: Event) => {
+  const rawValue = (event.target as HTMLInputElement).value;
+  if (rawValue === "") return;
+
+  const value = Math.min(
+    props.state.duration,
+    Math.max(1, Math.round(Number(rawValue) || 1)),
+  );
+  const next = [
+    ...(props.state.cancelWindow ?? [1, props.state.duration]),
+  ] as FrameWindow;
+
+  if (edge === 0) next[0] = Math.min(value, next[1]);
+  else next[1] = Math.max(value, next[0]);
+
+  emit("update:cancelWindow", next);
+};
 
 </script>
 
@@ -112,6 +136,60 @@ const EXCLUSIVE_FIELDS_WARNING =
       />
       <i aria-hidden="true" />
     </label>
+
+    <div
+      v-if="isAttack"
+      class="cancel-window"
+      :class="{ 'cancel-window--changed': changedFields.cancelWindow }"
+    >
+      <div class="cancel-window__heading">
+        <span>Окно комбо</span>
+        <button
+          v-if="state.cancelWindow"
+          type="button"
+          title="Удалить окно комбо"
+          @click="emit('update:cancelWindow', undefined)"
+        >
+          Удалить
+        </button>
+      </div>
+
+      <button
+        v-if="!state.cancelWindow"
+        class="cancel-window__add"
+        type="button"
+        @click="addCancelWindow"
+      >
+        <b>+</b> Добавить окно
+      </button>
+
+      <div v-else class="cancel-window__fields">
+        <label class="field">
+          <span>Начало</span>
+          <input
+            type="number"
+            min="1"
+            :max="state.cancelWindow[1]"
+            :value="state.cancelWindow[0]"
+            @focus="emit('historyStart')"
+            @blur="emit('historyEnd')"
+            @input="updateCancelWindowFrame(0, $event)"
+          />
+        </label>
+        <label class="field">
+          <span>Конец</span>
+          <input
+            type="number"
+            :min="state.cancelWindow[0]"
+            :max="state.duration"
+            :value="state.cancelWindow[1]"
+            @focus="emit('historyStart')"
+            @blur="emit('historyEnd')"
+            @input="updateCancelWindowFrame(1, $event)"
+          />
+        </label>
+      </div>
+    </div>
 
     <div class="state-settings__divider" />
     <h3 class="panel-title">Анимация</h3>
@@ -259,6 +337,65 @@ const EXCLUSIVE_FIELDS_WARNING =
       border-color: color-mix(in srgb, var(--state-accent) 68%, var(--border));
       background: var(--state-accent-soft);
       box-shadow: inset 3px 0 0 var(--state-accent);
+    }
+  }
+}
+
+.cancel-window {
+  display: grid;
+  gap: 7px;
+  padding: 9px;
+  border: 1px solid var(--border-soft);
+  border-radius: 6px;
+  background: var(--surface-muted);
+
+  &__heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    color: var(--text-secondary);
+    font-size: 12px;
+
+    button {
+      padding: 2px 5px;
+      border: 0;
+      background: transparent;
+      color: var(--text-muted);
+      font-size: 10px;
+      cursor: pointer;
+
+      &:hover { color: var(--danger); }
+    }
+  }
+
+  &__fields {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  &__add {
+    height: 30px;
+    border: 1px dashed color-mix(in srgb, var(--state-accent) 48%, var(--border));
+    border-radius: 5px;
+    background: color-mix(in srgb, var(--state-accent) 7%, var(--surface));
+    color: var(--text-secondary);
+    font-size: 11px;
+    cursor: pointer;
+
+    b { margin-right: 3px; color: var(--state-accent); font-size: 14px; }
+    &:hover { background: var(--state-accent-soft); color: var(--state-accent); }
+  }
+
+  &--changed {
+    border-color: color-mix(in srgb, var(--state-accent) 62%, var(--border));
+    background: color-mix(in srgb, var(--state-accent) 8%, var(--surface-muted));
+    box-shadow: inset 3px 0 0 var(--state-accent);
+
+    .cancel-window__heading > span {
+      color: var(--state-accent);
+      font-weight: 650;
     }
   }
 }

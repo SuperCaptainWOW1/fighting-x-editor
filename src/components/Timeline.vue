@@ -8,6 +8,7 @@ const props = defineProps<{
   state: EditorStateData;
   currentFrame: number;
   selectedBoxIds: string[];
+  showCancelWindow: boolean;
 }>();
 
 const emit = defineEmits<{
@@ -82,6 +83,16 @@ const frameStartPercent = (frame: number) =>
 const getBarStyle = (box: EditorBoxBase) => ({
   left: `${boundaryPercent(box.frames[0], "start")}%`,
   width: `${((box.frames[1] - box.frames[0] + 1) / props.state.duration) * 100}%`,
+});
+
+const cancelWindowStyle = computed(() => {
+  const frames = props.state.cancelWindow;
+  if (!frames) return {};
+
+  return {
+    left: `${boundaryPercent(frames[0], "start")}%`,
+    width: `${((frames[1] - frames[0] + 1) / props.state.duration) * 100}%`,
+  };
 });
 
 const frameFromClientX = (clientX: number, rect: DOMRect) => {
@@ -285,6 +296,29 @@ onBeforeUnmount(() => {
     </div>
 
     <div class="timeline__track-list">
+      <div
+        v-if="showCancelWindow && state.cancelWindow"
+        class="timeline__cancel-track"
+      >
+        <div class="timeline__cancel-label">
+          <i aria-hidden="true" />
+          <strong>Окно комбо</strong>
+          <span>{{ state.cancelWindow[0] }}–{{ state.cancelWindow[1] }}</span>
+        </div>
+        <div class="timeline__cancel-lane" @pointerdown="beginScrub">
+          <div
+            v-for="mark in marks"
+            :key="`cancel-grid-${mark}`"
+            class="timeline__grid-line"
+            :class="{ 'timeline__grid-line--major': isMajorMark(mark) }"
+            :style="{ left: `${frameStartPercent(mark)}%` }"
+          />
+          <div class="timeline__cancel-bar" :style="cancelWindowStyle">
+            <span>{{ state.cancelWindow[0] }}–{{ state.cancelWindow[1] }}</span>
+          </div>
+        </div>
+      </div>
+
       <div v-for="box in state.boxes" :key="box.id" class="timeline__track" :class="{ 'timeline__track--selected': selectedBoxIds.includes(box.id) }">
         <div class="timeline__track-label" @click="emit('selectBox', box.id, $event.shiftKey, false)" @dblclick="beginRename(box)">
           <i :class="`timeline__kind timeline__kind--${box.kind}`" />
@@ -362,6 +396,15 @@ onBeforeUnmount(() => {
   }
 
   &__track-list { height: calc(100% - 40px); overflow-y: auto; }
+
+  &__cancel-track { display: grid; grid-template-columns: var(--label-width) minmax(0, 1fr); height: 34px; border-bottom: 1px solid var(--border); }
+  &__cancel-label { position: relative; z-index: 3; display: grid; grid-template-columns: 4px minmax(0, 1fr) auto; align-items: center; gap: 7px; min-width: 0; padding: 4px 8px; border-right: 1px solid var(--border); background: var(--surface-subtle); }
+  &__cancel-label i { width: 4px; height: 20px; border-radius: 2px; background: var(--state-accent); opacity: .8; }
+  &__cancel-label strong { overflow: hidden; color: var(--text-secondary); font-size: 10px; font-weight: 700; text-overflow: ellipsis; white-space: nowrap; }
+  &__cancel-label span { color: var(--text-muted); font-size: 9px; font-variant-numeric: tabular-nums; }
+  &__cancel-lane { position: relative; min-width: 0; overflow: hidden; background: color-mix(in srgb, var(--state-accent) 3%, var(--surface)); cursor: ew-resize; }
+  &__cancel-bar { position: absolute; top: 5px; height: 24px; min-width: 3px; overflow: hidden; border: 1px solid color-mix(in srgb, var(--state-accent) 75%, var(--border)); border-radius: 4px; background: color-mix(in srgb, var(--state-accent) 24%, var(--surface)); color: color-mix(in srgb, var(--state-accent) 72%, var(--text)); pointer-events: none; }
+  &__cancel-bar span { display: block; padding: 0 7px; overflow: hidden; font-size: 10px; font-weight: 750; line-height: 22px; text-overflow: ellipsis; white-space: nowrap; }
 
   &__track { height: 52px; border-bottom: 1px solid var(--border-soft); }
   &__track--selected { background: var(--state-accent-soft); }
