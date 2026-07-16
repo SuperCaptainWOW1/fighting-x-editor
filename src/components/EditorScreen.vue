@@ -18,6 +18,7 @@ import {
   serializeStateData,
 } from "../utils/framedata";
 import { getStateCategory } from "../utils/stateCategory";
+import { handleDialogKeyboardShortcut } from "../utils/dialogKeyboard";
 import BoxInspector from "./BoxInspector.vue";
 import ExportPanel from "./ExportPanel.vue";
 import PreviewCanvas from "./PreviewCanvas.vue";
@@ -51,6 +52,7 @@ const selectedBoxIds = ref<string[]>([]);
 const previewSide = ref<"left" | "right">("left");
 const isPlaying = ref(false);
 const showExport = ref(false);
+const isExporting = ref(false);
 const showSyncConfirmation = ref(false);
 const isSynchronizing = ref(false);
 const synchronizationError = ref<string | null>(null);
@@ -773,11 +775,59 @@ const runHistoryAction = (action: () => boolean) => {
 };
 
 const handleKeyboardShortcut = (event: KeyboardEvent) => {
-  if (deleteConfirmation.value) {
-    if (event.key === "Escape") {
-      event.preventDefault();
-      deleteConfirmation.value = null;
+  const primaryModifier = event.ctrlKey || event.metaKey;
+  const key = event.key.toLowerCase();
+  const isSaveShortcut =
+    primaryModifier && !event.altKey && !event.shiftKey && key === "s";
+
+  if (isSaveShortcut) {
+    event.preventDefault();
+    if (
+      event.repeat ||
+      showExport.value ||
+      deleteConfirmation.value ||
+      showSyncConfirmation.value ||
+      showStateDeleteConfirmation.value
+    ) {
+      return;
     }
+    releaseControlFocus();
+    openExport();
+    return;
+  }
+
+  if (deleteConfirmation.value) {
+    handleDialogKeyboardShortcut(event, {
+      confirm: confirmBoxRemoval,
+      cancel: () => { deleteConfirmation.value = null; },
+    });
+    return;
+  }
+
+  if (showStateDeleteConfirmation.value) {
+    handleDialogKeyboardShortcut(event, {
+      confirm: confirmStateDeletion,
+      cancel: () => { showStateDeleteConfirmation.value = false; },
+      disabled: isDeletingState.value,
+    });
+    return;
+  }
+
+  if (showSyncConfirmation.value) {
+    handleDialogKeyboardShortcut(event, {
+      confirm: confirmSynchronization,
+      cancel: () => { showSyncConfirmation.value = false; },
+      disabled: isSynchronizing.value,
+    });
+    return;
+  }
+
+  if (showExport.value) {
+    handleDialogKeyboardShortcut(event, {
+      confirm: handleExport,
+      cancel: () => { showExport.value = false; },
+      disabled: isExporting.value,
+    });
     return;
   }
 
@@ -787,8 +837,6 @@ const handleKeyboardShortcut = (event: KeyboardEvent) => {
     return;
   }
 
-  const primaryModifier = event.ctrlKey || event.metaKey;
-  const key = event.key.toLowerCase();
   const isUndoShortcut = primaryModifier && !event.altKey && key === "z";
   const isRedoShortcut =
     primaryModifier &&
@@ -1064,8 +1112,14 @@ const openExport = () => {
 };
 
 const handleExport = async () => {
-  await exportSelected(exportSelection.value);
-  showExport.value = false;
+  if (isExporting.value) return;
+  isExporting.value = true;
+  try {
+    await exportSelected(exportSelection.value);
+    showExport.value = false;
+  } finally {
+    isExporting.value = false;
+  }
 };
 
 const openSynchronizationConfirmation = () => {
@@ -1224,7 +1278,7 @@ watch(
             <path d="M21 21v-5h-5" />
           </svg>
         </button>
-        <button class="top-action-button top-action-button--primary" type="button" aria-label="Сохранить" data-tooltip="Сохранить" @click="openExport">
+        <button class="top-action-button top-action-button--primary" type="button" aria-label="Сохранить" data-tooltip="Сохранить · Ctrl/⌘ + S" @click="openExport">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h12l2 2v14H5V4Zm3 0v6h8V4M8 20v-6h8v6" /></svg>
         </button>
         <button class="top-action-button top-action-button--danger" type="button" aria-label="Удалить состояние" data-tooltip="Удалить состояние" @click="openStateDeleteConfirmation">
@@ -1416,7 +1470,7 @@ watch(
       </button>
     </section>
 
-    <ExportPanel v-if="showExport" :entries="entryList" :selected-names="exportSelection" @close="showExport = false" @toggle="toggleExportName" @export="handleExport" />
+    <ExportPanel v-if="showExport" :entries="entryList" :selected-names="exportSelection" :is-saving="isExporting" @close="showExport = false" @toggle="toggleExportName" @export="handleExport" />
 
     <div v-if="showSyncConfirmation" class="sync-confirmation" @click.self="!isSynchronizing && (showSyncConfirmation = false)">
       <section class="sync-confirmation__dialog" role="dialog" aria-modal="true" aria-labelledby="sync-confirmation-title">
@@ -1435,8 +1489,8 @@ watch(
         </p>
         <p v-if="synchronizationError" class="sync-confirmation__error">{{ synchronizationError }}</p>
         <div class="sync-confirmation__actions">
-          <button class="button" type="button" :disabled="isSynchronizing" @click="showSyncConfirmation = false">Отмена</button>
-          <button class="button button--primary" type="button" :disabled="isSynchronizing" @click="confirmSynchronization">
+          <button class="button dialog-shortcut" type="button" title="Отмена · Esc" data-tooltip="Отмена · Esc" :disabled="isSynchronizing" @click="showSyncConfirmation = false">Отмена</button>
+          <button class="button button--primary dialog-shortcut" type="button" title="Подтвердить · Enter" data-tooltip="Подтвердить · Enter" :disabled="isSynchronizing" @click="confirmSynchronization">
             {{ isSynchronizing ? "Синхронизация…" : "Синхронизировать" }}
           </button>
         </div>
@@ -1452,8 +1506,8 @@ watch(
         <p>Состояние будет помечено на удаление. Изменение применится после сохранения профиля.</p>
         <p v-if="stateDeleteError" class="sync-confirmation__error">{{ stateDeleteError }}</p>
         <div class="sync-confirmation__actions">
-          <button class="button" type="button" :disabled="isDeletingState" @click="showStateDeleteConfirmation = false">Отмена</button>
-          <button class="button state-delete-dialog__confirm" type="button" :disabled="isDeletingState" @click="confirmStateDeletion">
+          <button class="button dialog-shortcut" type="button" title="Отмена · Esc" data-tooltip="Отмена · Esc" :disabled="isDeletingState" @click="showStateDeleteConfirmation = false">Отмена</button>
+          <button class="button state-delete-dialog__confirm dialog-shortcut" type="button" title="Удалить · Enter" data-tooltip="Удалить · Enter" :disabled="isDeletingState" @click="confirmStateDeletion">
             {{ isDeletingState ? "Удаляем…" : "Удалить" }}
           </button>
         </div>
@@ -1468,8 +1522,8 @@ watch(
         :style="{ left: `${deleteConfirmation.x}px`, top: `${deleteConfirmation.y}px` }"
       >
         <p>Удалить {{ deleteConfirmation.boxIds.length }} {{ getColliderNoun(deleteConfirmation.boxIds.length) }}?</p>
-        <button class="delete-confirmation__yes" type="button" autofocus @click="confirmBoxRemoval">Да</button>
-        <button type="button" @click="deleteConfirmation = null">Нет</button>
+        <button class="delete-confirmation__yes dialog-shortcut dialog-shortcut--below" type="button" title="Подтвердить · Enter" data-tooltip="Подтвердить · Enter" autofocus @click="confirmBoxRemoval">Да</button>
+        <button class="dialog-shortcut dialog-shortcut--below" type="button" title="Отмена · Esc" data-tooltip="Отмена · Esc" @click="deleteConfirmation = null">Нет</button>
       </section>
     </div>
   </section>

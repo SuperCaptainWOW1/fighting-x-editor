@@ -2,10 +2,11 @@
 import { computed } from "vue";
 import type { FrameDataEntry } from "../types/framedata";
 
-const props = defineProps<{
+const props = withDefaults(defineProps<{
   entries: FrameDataEntry[];
   selectedNames: string[];
-}>();
+  isSaving?: boolean;
+}>(), { isSaving: false });
 
 const emit = defineEmits<{
   close: [];
@@ -25,11 +26,11 @@ const toggleAll = (enabled: boolean) => {
 </script>
 
 <template>
-  <div class="modal-backdrop" @click.self="emit('close')">
-    <section class="modal">
+  <div class="modal-backdrop" @click.self="!isSaving && emit('close')">
+    <section class="modal" role="dialog" aria-modal="true" aria-labelledby="export-dialog-title">
       <header>
-        <h3>Сохранение</h3>
-        <button class="button button--ghost" type="button" @click="emit('close')">
+        <h3 id="export-dialog-title">Сохранение</h3>
+        <button class="button button--ghost dialog-shortcut" type="button" title="Закрыть · Esc" data-tooltip="Закрыть · Esc" :disabled="isSaving" @click="emit('close')">
           ×
         </button>
       </header>
@@ -37,6 +38,7 @@ const toggleAll = (enabled: boolean) => {
       <label class="export-all">
         <input
           type="checkbox"
+          :disabled="isSaving"
           :checked="allSelected"
           @change="toggleAll(($event.target as HTMLInputElement).checked)"
         />
@@ -48,6 +50,7 @@ const toggleAll = (enabled: boolean) => {
           <label>
             <input
               type="checkbox"
+              :disabled="isSaving"
               :checked="selectedNames.includes(entry.name)"
               @change="
                 emit(
@@ -69,8 +72,8 @@ const toggleAll = (enabled: boolean) => {
       </ul>
 
       <footer>
-        <button class="button button--primary" type="button" @click="emit('export')">
-          Сохранить
+        <button class="button button--primary dialog-shortcut" type="button" title="Сохранить · Enter" data-tooltip="Сохранить · Enter" :disabled="isSaving" @click="emit('export')">
+          {{ isSaving ? "Сохранение…" : "Сохранить" }}
         </button>
       </footer>
     </section>

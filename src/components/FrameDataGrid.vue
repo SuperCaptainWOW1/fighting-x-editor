@@ -10,6 +10,7 @@ import {
 import ExportPanel from "./ExportPanel.vue";
 import FrameDataCard from "./FrameDataCard.vue";
 import ThemeToggle from "./ThemeToggle.vue";
+import { handleDialogKeyboardShortcut } from "../utils/dialogKeyboard";
 
 const {
   state,
@@ -29,6 +30,7 @@ const {
 const router = useRouter();
 
 const showExport = ref(false);
+const isExporting = ref(false);
 const showSyncConfirmation = ref(false);
 const isSynchronizing = ref(false);
 const synchronizationError = ref<string | null>(null);
@@ -96,11 +98,67 @@ const isTextEditingTarget = (target: EventTarget | null) => {
 };
 
 const handleDeletedStateUndo = async (event: KeyboardEvent) => {
+  const primaryModifier = event.ctrlKey || event.metaKey;
+  const key = event.key.toLowerCase();
+  const isSaveShortcut =
+    primaryModifier && !event.altKey && !event.shiftKey && key === "s";
+
+  if (isSaveShortcut) {
+    event.preventDefault();
+    if (
+      event.repeat ||
+      showExport.value ||
+      showSyncConfirmation.value ||
+      showCreateState.value ||
+      Boolean(stateToDelete.value)
+    ) {
+      return;
+    }
+    openExport();
+    return;
+  }
+
+  if (stateToDelete.value) {
+    handleDialogKeyboardShortcut(event, {
+      confirm: confirmStateDeletion,
+      cancel: () => { stateToDelete.value = null; },
+      disabled: isDeletingState.value,
+    });
+    return;
+  }
+
+  if (showCreateState.value) {
+    handleDialogKeyboardShortcut(event, {
+      confirm: confirmCreateState,
+      cancel: () => { showCreateState.value = false; },
+      disabled: isCreatingState.value || !newStateName.value.trim(),
+    });
+    return;
+  }
+
+  if (showSyncConfirmation.value) {
+    handleDialogKeyboardShortcut(event, {
+      confirm: confirmSynchronization,
+      cancel: () => { showSyncConfirmation.value = false; },
+      disabled: isSynchronizing.value,
+    });
+    return;
+  }
+
+  if (showExport.value) {
+    handleDialogKeyboardShortcut(event, {
+      confirm: handleExport,
+      cancel: () => { showExport.value = false; },
+      disabled: isExporting.value,
+    });
+    return;
+  }
+
   const isUndoShortcut =
-    (event.ctrlKey || event.metaKey) &&
+    primaryModifier &&
     !event.altKey &&
     !event.shiftKey &&
-    event.key.toLowerCase() === "z";
+    key === "z";
 
   if (
     !isUndoShortcut ||
@@ -158,8 +216,14 @@ const openExport = () => {
 };
 
 const handleExport = async () => {
-  await exportSelected(exportSelection.value, true);
-  showExport.value = false;
+  if (isExporting.value) return;
+  isExporting.value = true;
+  try {
+    await exportSelected(exportSelection.value, true);
+    showExport.value = false;
+  } finally {
+    isExporting.value = false;
+  }
 };
 
 const openSynchronizationConfirmation = () => {
@@ -284,7 +348,7 @@ const confirmStateDeletion = async () => {
           </svg>
           <span>Синхронизировать все</span>
         </button>
-        <button class="button button--primary" type="button" @click="openExport">
+        <button class="button button--primary" type="button" title="Сохранить все · Ctrl/⌘ + S" @click="openExport">
           Сохранить все
         </button>
         <div class="topbar-theme-control">
@@ -355,6 +419,7 @@ const confirmStateDeletion = async () => {
       v-if="showExport"
       :entries="entryList"
       :selected-names="exportSelection"
+      :is-saving="isExporting"
       @close="showExport = false"
       @toggle="toggleExportName"
       @export="handleExport"
@@ -377,8 +442,8 @@ const confirmStateDeletion = async () => {
         </p>
         <p v-if="synchronizationError" class="grid-sync__error">{{ synchronizationError }}</p>
         <div class="grid-sync__actions">
-          <button class="button" type="button" :disabled="isSynchronizing" @click="showSyncConfirmation = false">Отмена</button>
-          <button class="button button--primary" type="button" :disabled="isSynchronizing" @click="confirmSynchronization">
+          <button class="button dialog-shortcut" type="button" title="Отмена · Esc" data-tooltip="Отмена · Esc" :disabled="isSynchronizing" @click="showSyncConfirmation = false">Отмена</button>
+          <button class="button button--primary dialog-shortcut" type="button" title="Подтвердить · Enter" data-tooltip="Подтвердить · Enter" :disabled="isSynchronizing" @click="confirmSynchronization">
             {{ isSynchronizing ? "Синхронизация…" : "Синхронизировать все" }}
           </button>
         </div>
@@ -392,11 +457,11 @@ const confirmStateDeletion = async () => {
             <span class="state-modal__icon state-modal__icon--add">+</span>
             <div><h2 id="create-state-title">Новое состояние</h2><p>Без коллайдеров и анимаций, длительность 10 кадров.</p></div>
           </div>
-          <button type="button" title="Закрыть" :disabled="isCreatingState" @click="showCreateState = false">×</button>
+          <button class="dialog-shortcut" type="button" title="Закрыть · Esc" data-tooltip="Закрыть · Esc" :disabled="isCreatingState" @click="showCreateState = false">×</button>
         </header>
         <label class="state-modal__field">
           <span>Название</span>
-          <input v-model="newStateName" type="text" autocomplete="off" placeholder="NEW_STATE" @keydown.enter="confirmCreateState" />
+          <input v-model="newStateName" type="text" autocomplete="off" placeholder="NEW_STATE" />
         </label>
         <label class="state-modal__field">
           <span>Тип состояния</span>
@@ -406,8 +471,8 @@ const confirmStateDeletion = async () => {
         </label>
         <p v-if="createStateError" class="state-modal__error">{{ createStateError }}</p>
         <footer>
-          <button class="button" type="button" :disabled="isCreatingState" @click="showCreateState = false">Отмена</button>
-          <button class="button button--primary" type="button" :disabled="isCreatingState || !newStateName.trim()" @click="confirmCreateState">
+          <button class="button dialog-shortcut" type="button" title="Отмена · Esc" data-tooltip="Отмена · Esc" :disabled="isCreatingState" @click="showCreateState = false">Отмена</button>
+          <button class="button button--primary dialog-shortcut" type="button" title="Создать · Enter" data-tooltip="Создать · Enter" :disabled="isCreatingState || !newStateName.trim()" @click="confirmCreateState">
             {{ isCreatingState ? "Создаём…" : "Создать" }}
           </button>
         </footer>
@@ -423,8 +488,8 @@ const confirmStateDeletion = async () => {
         <p>Состояние будет помечено на удаление. Изменение применится после сохранения профиля.</p>
         <p v-if="deleteStateError" class="state-modal__error">{{ deleteStateError }}</p>
         <footer>
-          <button class="button" type="button" :disabled="isDeletingState" @click="stateToDelete = null">Отмена</button>
-          <button class="button state-modal__danger" type="button" :disabled="isDeletingState" @click="confirmStateDeletion">
+          <button class="button dialog-shortcut" type="button" title="Отмена · Esc" data-tooltip="Отмена · Esc" :disabled="isDeletingState" @click="stateToDelete = null">Отмена</button>
+          <button class="button state-modal__danger dialog-shortcut" type="button" title="Удалить · Enter" data-tooltip="Удалить · Enter" :disabled="isDeletingState" @click="confirmStateDeletion">
             {{ isDeletingState ? "Удаляем…" : "Удалить" }}
           </button>
         </footer>

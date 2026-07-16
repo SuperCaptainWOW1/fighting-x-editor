@@ -170,6 +170,46 @@ select {
   font: inherit;
 }
 
+.dialog-shortcut {
+  position: relative;
+
+  &::after {
+    position: absolute;
+    z-index: 100;
+    bottom: calc(100% + 7px);
+    left: 50%;
+    padding: 6px 8px;
+    border: 1px solid var(--tooltip-border);
+    border-radius: 3px;
+    background: var(--tooltip-bg);
+    color: var(--tooltip-text);
+    content: attr(data-tooltip);
+    font-size: 10px;
+    font-weight: 500;
+    line-height: 1;
+    opacity: 0;
+    pointer-events: none;
+    transform: translate(-50%, 3px);
+    transition: 100ms ease;
+    white-space: nowrap;
+  }
+
+  &:hover::after {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+
+  &--below::after {
+    top: calc(100% + 7px);
+    bottom: auto;
+    transform: translate(-50%, -3px);
+  }
+
+  &--below:hover::after {
+    transform: translate(-50%, 0);
+  }
+}
+
 .button {
   padding: 7px 12px;
   border: 1px solid var(--border);
