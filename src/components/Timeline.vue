@@ -1,7 +1,11 @@
 <script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount, onMounted, ref } from "vue";
 import type { ComponentPublicInstance } from "vue";
-import type { EditorBoxBase, EditorStateData } from "../types/framedata";
+import type {
+  EditorBoxBase,
+  EditorStateData,
+  FrameWindow,
+} from "../types/framedata";
 import { fitFrameWindow } from "../utils/framedata";
 
 const props = defineProps<{
@@ -17,6 +21,7 @@ const emit = defineEmits<{
   "update:currentFrame": [frame: number];
   selectBox: [boxId: string, additive: boolean, preserveGroup?: boolean];
   updateBoxes: [updates: Array<{ boxId: string; patch: Partial<EditorBoxBase> }>];
+  "update:cancelWindow": [frames: FrameWindow];
   renameBox: [boxId: string, name: string];
   requestRemove: [boxIds: string[], point: { x: number; y: number }];
   addBox: [kind: "hurtbox" | "hitbox"];
@@ -176,12 +181,16 @@ const beginMove = (event: PointerEvent, box: EditorBoxBase) => {
   const initial = new Map(
     movingBoxes.map((candidate) => [candidate.id, [...candidate.frames] as [number, number]]),
   );
+  let hasDragged = false;
   emit("interactionStart");
 
   const move = (moveEvent: PointerEvent) => {
+    if (!hasDragged && Math.abs(moveEvent.clientX - startX) < 3) return;
     const frameDelta = Math.round(
       ((moveEvent.clientX - startX) / rect.width) * props.state.duration,
     );
+    if (!hasDragged && frameDelta === 0) return;
+    hasDragged = true;
     emit(
       "updateBoxes",
       movingBoxes.map((candidate) => {
@@ -200,12 +209,15 @@ const beginMove = (event: PointerEvent, box: EditorBoxBase) => {
     );
   };
 
-  const end = () => {
+  const end = (endEvent?: PointerEvent) => {
     window.removeEventListener("pointermove", move);
     window.removeEventListener("pointerup", end);
     window.removeEventListener("pointercancel", end);
     stopPointerInteraction = null;
     emit("interactionEnd");
+    if (endEvent?.type === "pointerup" && !hasDragged && !event.shiftKey) {
+      emit("selectBox", box.id, false, false);
+    }
   };
 
   window.addEventListener("pointermove", move);
@@ -232,10 +244,14 @@ const beginResize = (event: PointerEvent, box: EditorBoxBase, edge: 0 | 1) => {
   const initial = new Map(
     resizingBoxes.map((candidate) => [candidate.id, [...candidate.frames] as [number, number]]),
   );
+  let hasDragged = false;
   emit("interactionStart");
 
   const move = (moveEvent: PointerEvent) => {
+    if (!hasDragged && Math.abs(moveEvent.clientX - startX) < 3) return;
     const frameDelta = Math.round(((moveEvent.clientX - startX) / rect.width) * props.state.duration);
+    if (!hasDragged && frameDelta === 0) return;
+    hasDragged = true;
     emit(
       "updateBoxes",
       resizingBoxes.map((candidate) => {
@@ -249,6 +265,94 @@ const beginResize = (event: PointerEvent, box: EditorBoxBase, edge: 0 | 1) => {
         return { boxId: candidate.id, patch: { frames: next } };
       }),
     );
+  };
+
+  const end = (endEvent?: PointerEvent) => {
+    window.removeEventListener("pointermove", move);
+    window.removeEventListener("pointerup", end);
+    window.removeEventListener("pointercancel", end);
+    stopPointerInteraction = null;
+    emit("interactionEnd");
+    if (endEvent?.type === "pointerup" && !hasDragged && !event.shiftKey) {
+      emit("selectBox", box.id, false, false);
+    }
+  };
+
+  window.addEventListener("pointermove", move);
+  window.addEventListener("pointerup", end);
+  window.addEventListener("pointercancel", end);
+  stopPointerInteraction = end;
+};
+
+const beginCancelWindowMove = (event: PointerEvent) => {
+  if (event.button !== 0 || !props.state.cancelWindow) return;
+  event.preventDefault();
+  event.stopPropagation();
+  stopPointerInteraction?.();
+
+  const lane = (event.currentTarget as HTMLElement).closest(
+    ".timeline__cancel-lane",
+  ) as HTMLElement;
+  const rect = lane.getBoundingClientRect();
+  const startX = event.clientX;
+  const initial = [...props.state.cancelWindow] as FrameWindow;
+  emit("interactionStart");
+
+  const move = (moveEvent: PointerEvent) => {
+    const frameDelta = Math.round(
+      ((moveEvent.clientX - startX) / rect.width) * props.state.duration,
+    );
+    emit(
+      "update:cancelWindow",
+      fitFrameWindow(
+        [initial[0] + frameDelta, initial[1] + frameDelta],
+        props.state.duration,
+      ),
+    );
+  };
+
+  const end = () => {
+    window.removeEventListener("pointermove", move);
+    window.removeEventListener("pointerup", end);
+    window.removeEventListener("pointercancel", end);
+    stopPointerInteraction = null;
+    emit("interactionEnd");
+  };
+
+  window.addEventListener("pointermove", move);
+  window.addEventListener("pointerup", end);
+  window.addEventListener("pointercancel", end);
+  stopPointerInteraction = end;
+};
+
+const beginCancelWindowResize = (event: PointerEvent, edge: 0 | 1) => {
+  if (event.button !== 0 || !props.state.cancelWindow) return;
+  event.preventDefault();
+  event.stopPropagation();
+  stopPointerInteraction?.();
+
+  const lane = (event.currentTarget as HTMLElement).closest(
+    ".timeline__cancel-lane",
+  ) as HTMLElement;
+  const rect = lane.getBoundingClientRect();
+  const startX = event.clientX;
+  const initial = [...props.state.cancelWindow] as FrameWindow;
+  emit("interactionStart");
+
+  const move = (moveEvent: PointerEvent) => {
+    const frameDelta = Math.round(
+      ((moveEvent.clientX - startX) / rect.width) * props.state.duration,
+    );
+    const next = [...initial] as FrameWindow;
+    if (edge === 0) {
+      next[0] = Math.min(initial[1], Math.max(1, initial[0] + frameDelta));
+    } else {
+      next[1] = Math.max(
+        initial[0],
+        Math.min(props.state.duration, initial[1] + frameDelta),
+      );
+    }
+    emit("update:cancelWindow", next);
   };
 
   const end = () => {
@@ -313,8 +417,20 @@ onBeforeUnmount(() => {
             :class="{ 'timeline__grid-line--major': isMajorMark(mark) }"
             :style="{ left: `${frameStartPercent(mark)}%` }"
           />
-          <div class="timeline__cancel-bar" :style="cancelWindowStyle">
+          <div
+            class="timeline__cancel-bar"
+            :style="cancelWindowStyle"
+            @pointerdown="beginCancelWindowMove"
+          >
             <span>{{ state.cancelWindow[0] }}–{{ state.cancelWindow[1] }}</span>
+            <i
+              class="timeline__cancel-handle timeline__cancel-handle--start"
+              @pointerdown="beginCancelWindowResize($event, 0)"
+            />
+            <i
+              class="timeline__cancel-handle timeline__cancel-handle--end"
+              @pointerdown="beginCancelWindowResize($event, 1)"
+            />
           </div>
         </div>
       </div>
@@ -403,8 +519,12 @@ onBeforeUnmount(() => {
   &__cancel-label strong { overflow: hidden; color: var(--text-secondary); font-size: 10px; font-weight: 700; text-overflow: ellipsis; white-space: nowrap; }
   &__cancel-label span { color: var(--text-muted); font-size: 9px; font-variant-numeric: tabular-nums; }
   &__cancel-lane { position: relative; min-width: 0; overflow: hidden; background: color-mix(in srgb, var(--state-accent) 3%, var(--surface)); cursor: ew-resize; }
-  &__cancel-bar { position: absolute; top: 5px; height: 24px; min-width: 3px; overflow: hidden; border: 1px solid color-mix(in srgb, var(--state-accent) 75%, var(--border)); border-radius: 4px; background: color-mix(in srgb, var(--state-accent) 24%, var(--surface)); color: color-mix(in srgb, var(--state-accent) 72%, var(--text)); pointer-events: none; }
+  &__cancel-bar { position: absolute; top: 5px; height: 24px; min-width: 5px; overflow: visible; border: 1px solid color-mix(in srgb, var(--state-accent) 75%, var(--border)); border-radius: 4px; background: color-mix(in srgb, var(--state-accent) 24%, var(--surface)); color: color-mix(in srgb, var(--state-accent) 72%, var(--text)); cursor: grab; touch-action: none; }
+  &__cancel-bar:active { cursor: grabbing; }
   &__cancel-bar span { display: block; padding: 0 7px; overflow: hidden; font-size: 10px; font-weight: 750; line-height: 22px; text-overflow: ellipsis; white-space: nowrap; }
+  &__cancel-handle { position: absolute; z-index: 1; top: -1px; bottom: -1px; width: 9px; border-inline: 1px solid color-mix(in srgb, var(--state-accent) 75%, var(--border)); background: color-mix(in srgb, var(--state-accent) 38%, var(--surface)); cursor: ew-resize; }
+  &__cancel-handle--start { left: -1px; border-radius: 4px 0 0 4px; }
+  &__cancel-handle--end { right: -1px; border-radius: 0 4px 4px 0; }
 
   &__track { height: 52px; border-bottom: 1px solid var(--border-soft); }
   &__track--selected { background: var(--state-accent-soft); }

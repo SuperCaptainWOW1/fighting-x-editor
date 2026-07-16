@@ -114,6 +114,7 @@
 * {
   box-sizing: border-box;
   scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+  scrollbar-gutter: stable;
   scrollbar-width: thin;
 }
 
@@ -127,6 +128,7 @@
 }
 
 *::-webkit-scrollbar {
+  -webkit-appearance: none;
   width: 10px;
   height: 10px;
 }

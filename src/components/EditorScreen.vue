@@ -74,6 +74,7 @@ const viewportEditMode = ref<ViewportEditMode>("translate");
 let viewportModeBeforeBoxSelect: Exclude<ViewportEditMode, "box-select"> = "translate";
 const suppressViewportToolHover = ref(false);
 const viewportZoom = ref(100);
+const VIEWPORT_BASE_ZOOM = 1.2;
 const clipNames = ref<string[]>([]);
 let playTimer: number | null = null;
 const FPS_STORAGE_KEY = "framedata-editor-fps";
@@ -1286,7 +1287,7 @@ watch(
         :selected-box-ids="selectedBoxIds"
         :is-rotated="previewSide === 'right'"
         :edit-mode="viewportEditMode"
-        :zoom="viewportZoom / 100"
+        :zoom="(viewportZoom / 100) * VIEWPORT_BASE_ZOOM"
         :layout-key="`${leftPanelCollapsed}-${rightPanelCollapsed}-${timelineCollapsed}`"
         @transform-start="beginHistoryTransaction"
         @transform-end="endHistoryTransaction"
@@ -1396,6 +1397,7 @@ watch(
         @update:current-frame="currentFrame = $event"
         @select-box="selectTimelineBox"
         @update-boxes="handleBoxesUpdate"
+        @update:cancel-window="updateCurrentEntry((data: EditorStateData) => { data.cancelWindow = $event })"
         @rename-box="(id, name) => handleBoxUpdate(id, { name })"
         @request-remove="requestBoxRemoval"
         @add-box="handleAddBox"
