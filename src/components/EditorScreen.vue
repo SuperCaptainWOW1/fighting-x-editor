@@ -1394,6 +1394,7 @@ watch(
         :show-cancel-window="currentStateCategory.id === 'attack'"
         @interaction-start="beginHistoryTransaction"
         @interaction-end="endHistoryTransaction"
+        @clear-selection="selectedBoxIds = []"
         @update:current-frame="currentFrame = $event"
         @select-box="selectTimelineBox"
         @update-boxes="handleBoxesUpdate"

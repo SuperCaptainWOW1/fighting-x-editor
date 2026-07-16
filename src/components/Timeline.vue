@@ -18,6 +18,7 @@ const props = defineProps<{
 const emit = defineEmits<{
   interactionStart: [];
   interactionEnd: [];
+  clearSelection: [];
   "update:currentFrame": [frame: number];
   selectBox: [boxId: string, additive: boolean, preserveGroup?: boolean];
   updateBoxes: [updates: Array<{ boxId: string; patch: Partial<EditorBoxBase> }>];
@@ -47,7 +48,7 @@ const tickStep = computed(() => {
     1,
     Math.floor(rulerWidth.value / MIN_TICK_SPACING),
   );
-  const rawStep = Math.max(1, props.state.duration / maxIntervals);
+  const rawStep = Math.max(1, (props.state.duration - 1) / maxIntervals);
   const magnitude = 10 ** Math.floor(Math.log10(rawStep));
   const normalized = rawStep / magnitude;
   const multiplier = normalized <= 1 ? 1 : normalized <= 2 ? 2 : normalized <= 5 ? 5 : 10;
@@ -65,6 +66,19 @@ const marks = computed(() => {
 const isMajorMark = (frame: number) =>
   (frame - 1) % (tickStep.value * 5) === 0;
 
+const LAST_LABEL_MIN_SPACING = 64;
+const shouldShowMarkLabel = (frame: number) => {
+  if (frame !== props.state.duration || marks.value.length < 2) return true;
+
+  const previousMark = marks.value[marks.value.length - 2];
+  if (previousMark === undefined || props.state.duration <= 1) return true;
+
+  const spacing =
+    ((props.state.duration - previousMark) / frameIntervalCount.value) *
+    rulerWidth.value;
+  return spacing >= LAST_LABEL_MIN_SPACING;
+};
+
 const selectedBoxes = computed(() =>
   props.selectedBoxIds
     .map((id) => props.state.boxes.find((box) => box.id === id))
@@ -80,29 +94,53 @@ const getDefaultName = (box: EditorBoxBase) => {
 };
 
 const getName = (box: EditorBoxBase) => box.name || getDefaultName(box);
-const boundaryPercent = (frame: number, edge: "start" | "end") =>
-  (((edge === "start" ? frame - 1 : frame) / props.state.duration) * 100);
-const frameStartPercent = (frame: number) =>
-  boundaryPercent(frame, "start");
+const frameIntervalCount = computed(() =>
+  Math.max(1, props.state.duration - 1),
+);
 
-const getBarStyle = (box: EditorBoxBase) => ({
-  left: `${boundaryPercent(box.frames[0], "start")}%`,
-  width: `${((box.frames[1] - box.frames[0] + 1) / props.state.duration) * 100}%`,
-});
+const framePercent = (frame: number) => {
+  if (props.state.duration <= 1) return 0;
+  const clampedFrame = Math.min(props.state.duration, Math.max(1, frame));
+  return ((clampedFrame - 1) / frameIntervalCount.value) * 100;
+};
+
+const frameDeltaFromPixels = (pixelDelta: number, width: number) =>
+  Math.round((pixelDelta / width) * frameIntervalCount.value);
+
+const getFrameWindowStyle = (frames: FrameWindow) => {
+  const start = framePercent(frames[0]);
+  const end = framePercent(frames[1]);
+
+  if (frames[0] === frames[1]) {
+    const singleFrameWidth = 5;
+    const left = start <= 0
+      ? "0px"
+      : start >= 100
+        ? `calc(100% - ${singleFrameWidth}px)`
+        : `calc(${start}% - ${singleFrameWidth / 2}px)`;
+    return { left, width: `${singleFrameWidth}px` };
+  }
+
+  return {
+    left: `${start}%`,
+    width: `${end - start}%`,
+  };
+};
+
+const getBarStyle = (box: EditorBoxBase) =>
+  getFrameWindowStyle(box.frames);
 
 const cancelWindowStyle = computed(() => {
   const frames = props.state.cancelWindow;
   if (!frames) return {};
 
-  return {
-    left: `${boundaryPercent(frames[0], "start")}%`,
-    width: `${((frames[1] - frames[0]) / props.state.duration) * 100}%`,
-  };
+  return getFrameWindowStyle(frames);
 });
 
 const frameFromClientX = (clientX: number, rect: DOMRect) => {
-  const ratio = Math.min(0.99999, Math.max(0, (clientX - rect.left) / rect.width));
-  return Math.floor(ratio * props.state.duration) + 1;
+  if (props.state.duration <= 1) return 1;
+  const ratio = Math.min(1, Math.max(0, (clientX - rect.left) / rect.width));
+  return Math.round(ratio * frameIntervalCount.value) + 1;
 };
 
 let stopPointerInteraction: (() => void) | null = null;
@@ -110,6 +148,7 @@ let stopPointerInteraction: (() => void) | null = null;
 const beginScrub = (event: PointerEvent) => {
   if (event.button !== 0) return;
   event.preventDefault();
+  emit("clearSelection");
 
   stopPointerInteraction?.();
   const target = event.currentTarget as HTMLElement;
@@ -186,8 +225,9 @@ const beginMove = (event: PointerEvent, box: EditorBoxBase) => {
 
   const move = (moveEvent: PointerEvent) => {
     if (!hasDragged && Math.abs(moveEvent.clientX - startX) < 3) return;
-    const frameDelta = Math.round(
-      ((moveEvent.clientX - startX) / rect.width) * props.state.duration,
+    const frameDelta = frameDeltaFromPixels(
+      moveEvent.clientX - startX,
+      rect.width,
     );
     if (!hasDragged && frameDelta === 0) return;
     hasDragged = true;
@@ -249,7 +289,10 @@ const beginResize = (event: PointerEvent, box: EditorBoxBase, edge: 0 | 1) => {
 
   const move = (moveEvent: PointerEvent) => {
     if (!hasDragged && Math.abs(moveEvent.clientX - startX) < 3) return;
-    const frameDelta = Math.round(((moveEvent.clientX - startX) / rect.width) * props.state.duration);
+    const frameDelta = frameDeltaFromPixels(
+      moveEvent.clientX - startX,
+      rect.width,
+    );
     if (!hasDragged && frameDelta === 0) return;
     hasDragged = true;
     emit(
@@ -299,8 +342,9 @@ const beginCancelWindowMove = (event: PointerEvent) => {
   emit("interactionStart");
 
   const move = (moveEvent: PointerEvent) => {
-    const frameDelta = Math.round(
-      ((moveEvent.clientX - startX) / rect.width) * props.state.duration,
+    const frameDelta = frameDeltaFromPixels(
+      moveEvent.clientX - startX,
+      rect.width,
     );
     emit(
       "update:cancelWindow",
@@ -340,8 +384,9 @@ const beginCancelWindowResize = (event: PointerEvent, edge: 0 | 1) => {
   emit("interactionStart");
 
   const move = (moveEvent: PointerEvent) => {
-    const frameDelta = Math.round(
-      ((moveEvent.clientX - startX) / rect.width) * props.state.duration,
+    const frameDelta = frameDeltaFromPixels(
+      moveEvent.clientX - startX,
+      rect.width,
     );
     const next = [...initial] as FrameWindow;
     if (edge === 0) {
@@ -393,13 +438,16 @@ onBeforeUnmount(() => {
         <button class="tool-button tool-button--hit" type="button" title="Добавить hitbox" @click="emit('addBox', 'hitbox')"><b>+</b> HITBOX</button>
       </div>
       <div ref="rulerRef" class="timeline__ruler" @pointerdown="beginScrub">
-        <button v-for="mark in marks" :key="mark" class="timeline__tick" type="button" :style="{ left: `${frameStartPercent(mark)}%` }" @click.stop="emit('update:currentFrame', mark)">
-          <span>{{ mark }}</span>
+        <button v-for="mark in marks" :key="mark" class="timeline__tick" :class="{ 'timeline__tick--last': mark === state.duration }" type="button" :style="{ left: `${framePercent(mark)}%` }" @click.stop="emit('update:currentFrame', mark)">
+          <span v-if="shouldShowMarkLabel(mark)">{{ mark }}</span>
         </button>
       </div>
     </div>
 
-    <div class="timeline__track-list">
+    <div
+      class="timeline__track-list"
+      @pointerdown.self="emit('clearSelection')"
+    >
       <div
         v-if="showCancelWindow && state.cancelWindow"
         class="timeline__cancel-track"
@@ -415,7 +463,7 @@ onBeforeUnmount(() => {
             :key="`cancel-grid-${mark}`"
             class="timeline__grid-line"
             :class="{ 'timeline__grid-line--major': isMajorMark(mark) }"
-            :style="{ left: `${frameStartPercent(mark)}%` }"
+            :style="{ left: `${framePercent(mark)}%` }"
           />
           <div
             class="timeline__cancel-bar"
@@ -456,7 +504,7 @@ onBeforeUnmount(() => {
         </div>
 
         <div class="timeline__lane" @pointerdown="beginScrub">
-          <div v-for="mark in marks" :key="`grid-${mark}`" class="timeline__grid-line" :class="{ 'timeline__grid-line--major': isMajorMark(mark) }" :style="{ left: `${frameStartPercent(mark)}%` }" />
+          <div v-for="mark in marks" :key="`grid-${mark}`" class="timeline__grid-line" :class="{ 'timeline__grid-line--major': isMajorMark(mark) }" :style="{ left: `${framePercent(mark)}%` }" />
           <button class="timeline__bar" type="button" :class="[`timeline__bar--${box.kind}`, { 'timeline__bar--selected': selectedBoxIds.includes(box.id) }]" :style="getBarStyle(box)" @pointerdown="beginMove($event, box)" @click.stop>
             <span class="timeline__bar-label">{{ box.frames[1] - box.frames[0] + 1 }}</span>
             <i class="timeline__handle timeline__handle--start" @pointerdown="beginResize($event, box, 0)" />
@@ -472,15 +520,15 @@ onBeforeUnmount(() => {
     </div>
 
     <template v-for="box in selectedBoxes" :key="`boundaries-${box.id}`">
-      <div class="timeline__boundary" :style="{ left: `calc(208px + (100% - 208px) * ${boundaryPercent(box.frames[0], 'start') / 100})` }">
+      <div class="timeline__boundary" :style="{ left: `calc(208px + (100% - 208px) * ${framePercent(box.frames[0]) / 100})` }">
         <span>{{ box.frames[0] }}</span>
       </div>
-      <div class="timeline__boundary" :style="{ left: `calc(208px + (100% - 208px) * ${boundaryPercent(box.frames[1], 'end') / 100})` }">
+      <div class="timeline__boundary" :style="{ left: `calc(208px + (100% - 208px) * ${framePercent(box.frames[1]) / 100})` }">
         <span>{{ box.frames[1] }}</span>
       </div>
     </template>
 
-    <div class="timeline__playhead" :style="{ left: `calc(208px + (100% - 208px) * ${frameStartPercent(currentFrame) / 100})` }">
+    <div class="timeline__playhead" :style="{ left: `calc(208px + (100% - 208px) * ${framePercent(currentFrame) / 100})` }">
       <span>{{ currentFrame }}</span>
     </div>
   </section>
@@ -509,6 +557,7 @@ onBeforeUnmount(() => {
     position: absolute; bottom: 0; width: 1px; height: 13px; padding: 0; border: 0; background: var(--text-muted); color: var(--text-secondary); cursor: pointer;
     &::after { position: absolute; bottom: 0; left: 0; width: 1px; height: 6px; background: var(--border-strong); content: ""; }
     span { position: absolute; top: -12px; left: 4px; font-size: 9px; font-variant-numeric: tabular-nums; }
+    &--last span { right: 4px; left: auto; }
   }
 
   &__track-list { height: calc(100% - 40px); overflow-y: auto; }
@@ -519,7 +568,7 @@ onBeforeUnmount(() => {
   &__cancel-label strong { overflow: hidden; color: var(--text-secondary); font-size: 10px; font-weight: 700; text-overflow: ellipsis; white-space: nowrap; }
   &__cancel-label span { color: var(--text-muted); font-size: 9px; font-variant-numeric: tabular-nums; }
   &__cancel-lane { position: relative; min-width: 0; overflow: hidden; background: color-mix(in srgb, var(--state-accent) 3%, var(--surface)); cursor: ew-resize; }
-  &__cancel-bar { position: absolute; top: 3px; height: calc(100% - 6px); min-width: 5px; overflow: visible; border: 1px solid color-mix(in srgb, var(--state-accent) 75%, var(--border)); border-radius: 3px; background: color-mix(in srgb, var(--state-accent) 24%, var(--surface)); color: color-mix(in srgb, var(--state-accent) 72%, var(--text)); cursor: grab; touch-action: none; }
+  &__cancel-bar { position: absolute; top: 3px; height: calc(100% - 6px); min-width: 1px; overflow: visible; border: 1px solid color-mix(in srgb, var(--state-accent) 75%, var(--border)); border-radius: 3px; background: color-mix(in srgb, var(--state-accent) 24%, var(--surface)); color: color-mix(in srgb, var(--state-accent) 72%, var(--text)); cursor: grab; touch-action: none; }
   &__cancel-bar:active { cursor: grabbing; }
   &__cancel-bar span { display: block; padding: 0 10px; overflow: hidden; font-size: 10px; font-weight: 750; line-height: 26px; text-overflow: ellipsis; white-space: nowrap; }
   &__cancel-handle { position: absolute; z-index: 1; top: -1px; bottom: -1px; width: 10px; border: 1px solid color-mix(in srgb, var(--state-accent) 75%, var(--border)); background: color-mix(in srgb, var(--state-accent) 38%, var(--surface)); cursor: ew-resize; }
@@ -547,7 +596,7 @@ onBeforeUnmount(() => {
   &__track:nth-child(even) &__lane { background: var(--surface-muted); }
   &__grid-line { position: absolute; top: 0; bottom: 0; width: 1px; background: var(--border-soft); pointer-events: none; &--major { background: var(--border); } }
 
-  &__bar { position: absolute; top: 0; height: 100%; min-width: 5px; padding: 0 10px; border: 1px solid color-mix(in srgb, #000 28%, transparent); border-radius: 4px; box-shadow: none; cursor: grab; overflow: visible; touch-action: none; &:active { cursor: grabbing; } }
+  &__bar { position: absolute; top: 0; height: 100%; min-width: 1px; padding: 0 10px; border: 1px solid color-mix(in srgb, #000 28%, transparent); border-radius: 4px; box-shadow: none; cursor: grab; overflow: visible; touch-action: none; &:active { cursor: grabbing; } }
   &__bar--hurtbox { background: var(--collider-hurtbox); color: var(--collider-hurtbox-text); }
   &__bar--hitbox { background: var(--collider-hitbox); color: var(--collider-hitbox-text); }
   &__bar--selected { border-color: var(--collider-selected); box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--collider-selected) 48%, transparent); }
